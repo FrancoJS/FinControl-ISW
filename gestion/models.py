@@ -74,4 +74,4 @@ class TransaccionRecurrente(models.Model):
     monto = models.IntegerField()
     frecuencia = models.CharField(max_length=50, choices=FRECUENCIAS)
     proxima_ejecucion = models.DateField()
-    cuenta_relacionada = models.ForeignKey(Cuenta, on_delete=models.SET_NULL)
+    cuenta_relacionada = models.ForeignKey(Cuenta, on_delete=models.SET_NULL, null=True)

@@ -1,0 +1,39 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Entornos virtuales ---
+venv/
+env/
+.venv/
+
+# --- Variables de entorno ---
+.env
+*.env
+.env.*
+
+# --- Django ---
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Archivos de compilación y cache adicionales
+build/
+dist/
+*.egg-info/
+
+# Archivos de migración (opcional, si no deseas versionarlos)
+# ** Descomentar si NO quieres subir migraciones al repo **
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# Configuración de IDEs/editors
+.vscode/
+.idea/
+*.swp
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db

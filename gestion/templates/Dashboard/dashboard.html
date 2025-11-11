@@ -203,8 +203,8 @@
         <a href="#"><i class="bi bi-repeat"></i><span>Recurrentes</span></a>
         <a href="#"><i class="bi bi-bar-chart"></i><span>Reportes</span></a>
         <hr style="border-color:#133b5c;">
-        <a href="#"><i class="bi bi-person-circle"></i><span>Usuario</span></a>
-        <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i><span>Cerrar sesión</span></a>
+        <a href="#usuario"><i class="bi bi-person-circle"></i><span>Usuario</span></a>
+        <a href=""><i class="bi bi-box-arrow-right"></i><span>Cerrar sesión</span></a>
     </div>
 
     <!-- Topbar -->
@@ -219,6 +219,14 @@
     <!-- Main -->
     <div class="main-content">
         <div class="container-fluid">
+
+            {% if mensaje %}
+            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                <i class="bi bi-check-circle"></i> {{ mensaje }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            <!-- Cuentas -->
             <h3 id="cuentas" class="section-title"><i class="bi bi-wallet2"></i> Cuentas bancarias</h3>
             <div class="d-flex justify-content-end mb-3">
                 <button id="openOverlay" class="btn btn-main">

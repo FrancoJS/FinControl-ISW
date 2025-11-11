@@ -86,20 +86,31 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'landing' %}">FinControl</a>
+            <a class="navbar-brand" href="">FinControl</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'registro' %}">Registrarse</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/registro/">Registrarse</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/iniciar_sesion/">Iniciar Sesión</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Formulario -->
+    {% if r %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ r }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% elif r2 %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ r2 }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
     <div class="form-container">
         <h2 class="mb-4 text-center text-info">Crea tu cuenta</h2>
         <form method="POST">
@@ -112,14 +123,14 @@
 
             <div class="mb-4">
                 <label for="contraseña" class="form-label">Contraseña</label>
-                <input type="password" id="contraseña" name="contraseña" class="form-control" placeholder="********" required>
+                <input type="password" id="contraseña" name="password" class="form-control" placeholder="********" required>
             </div>
 
             <button type="submit" class="btn btn-main w-100">Iniciar Sesion</button>
         </form>
 
         <p class="mt-3 text-center">¿No tienes una cuenta?
-            <a href="{% url 'login' %}" class="text-warning">Registrarse</a>
+            <a href="/registro/" class="text-warning">Registrarse</a>
         </p>
     </div>
 

@@ -1,0 +1,109 @@
+<style>
+	/* 🔹 Personalización de los inputs */
+	.form-control::placeholder {
+		color: #ffffffcc; /* blanco con ligera transparencia */
+	}
+
+	/* 🔹 Quitar flechas del input number en navegadores WebKit (Chrome, Edge, Safari) */
+	input[type='number']::-webkit-outer-spin-button,
+	input[type='number']::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	/* 🔹 Quitar flechas del input number en Firefox */
+	input[type='number'] {
+		-moz-appearance: textfield;
+	}
+
+	/* 🔹 Ajuste opcional: color de texto dentro del input */
+	.form-control {
+		color: #fff;
+		background-color: #1b2233; /* opcional: color de fondo oscuro */
+		border: 1px solid #334;
+	}
+
+	.form-control:focus {
+		border-color: #5aa9e6;
+		box-shadow: 0 0 4px #5aa9e6;
+		background-color: #212a3d;
+	}
+</style>
+
+<div id="overlay" class="overlay" aria-hidden="true">
+	<div class="form-container" role="dialog" aria-labelledby="crearCuentaTitle">
+		<h2 id="crearCuentaTitle"><i class="bi bi-wallet2"></i> Crear Nueva Cuenta</h2>
+
+		<form method="POST" action="/crear-cuenta/">
+			{% csrf_token %}
+
+			<!-- Nombre de la cuenta -->
+			<div class="mb-3">
+				<label class="form-label"><i class="bi bi-bank"></i> Nombre de la cuenta</label>
+				<input type="text" name="nombre" class="form-control" placeholder="Ejemplo: Cuenta de Ahorros" required />
+			</div>
+
+			<!-- Saldo inicial -->
+			<div class="mb-3">
+				<label class="form-label"><i class="bi bi-cash-stack"></i> Saldo inicial</label>
+				<input type="number" name="saldo" class="form-control" placeholder="Ejemplo: 50000" min="0" required />
+			</div>
+
+			<!-- Botón registrar -->
+			<button type="submit" class="btn btn-main"><i class="bi bi-plus-circle"></i> Registrar cuenta</button>
+		</form>
+
+		<!-- Botón cancelar -->
+		<a href="#" id="closeOverlay" class="close-btn" role="button" aria-label="Cancelar">
+			<i class="bi bi-x-circle"></i> Cancelar
+		</a>
+	</div>
+</div>
+
+<script>
+	(function () {
+		const overlay = document.getElementById('overlay');
+		const openBtn = document.getElementById('openOverlay');
+		const closeBtn = document.getElementById('closeOverlay');
+
+		if (!overlay) return;
+
+		// Abrir overlay
+		if (openBtn) {
+			openBtn.addEventListener('click', function (e) {
+				e.preventDefault();
+				overlay.classList.add('active');
+				overlay.setAttribute('aria-hidden', 'false');
+				const first = overlay.querySelector('input, button, [tabindex]');
+				if (first) first.focus();
+			});
+		}
+
+		// Cerrar overlay
+		if (closeBtn) {
+			closeBtn.addEventListener('click', function (e) {
+				e.preventDefault();
+				overlay.classList.remove('active');
+				overlay.setAttribute('aria-hidden', 'true');
+				if (openBtn) openBtn.focus();
+			});
+		}
+
+		// Cerrar con Escape o clic fuera del modal
+		document.addEventListener('keydown', function (e) {
+			if (e.key === 'Escape' && overlay.classList.contains('active')) {
+				overlay.classList.remove('active');
+				overlay.setAttribute('aria-hidden', 'true');
+				if (openBtn) openBtn.focus();
+			}
+		});
+
+		overlay.addEventListener('click', function (e) {
+			if (e.target === overlay) {
+				overlay.classList.remove('active');
+				overlay.setAttribute('aria-hidden', 'true');
+				if (openBtn) openBtn.focus();
+			}
+		});
+	})();
+</script>

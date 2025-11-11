@@ -1,0 +1,118 @@
+{% extends 'Dashboard/dashboard.html' %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <h3 class="section-title text-info mb-4">
+        <i class="bi bi-bullseye"></i> Metas de ahorro
+    </h3>
+
+    <!-- Mensajes -->
+    {% if r %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ r }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% elif r2 %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ r2 }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <!-- Botón crear nueva meta -->
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#crearMetaModal">
+            <i class="bi bi-plus-circle"></i> Nueva meta
+        </button>
+    </div>
+
+    <!-- Tabla de metas -->
+    <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle">
+            <thead>
+                <tr class="text-info">
+                    <th>Nombre</th>
+                    <th>Monto objetivo</th>
+                    <th>Monto actual</th>
+                    <th>Progreso</th>
+                    <th>Fecha límite</th>
+                    <th>Cuenta asociada</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for meta in metas %}
+                <tr>
+                    <td>{{ meta.nombre }}</td>
+                    <td>${{ meta.monto_objetivo }}</td>
+                    <td>${{ meta.monto_actual }}</td>
+                    <td style="width: 250px;">
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar bg-info" role="progressbar"
+                                style="width: {{ meta.porcentaje }}%;"
+                                aria-valuenow="{{ meta.porcentaje }}" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <small>{{ meta.porcentaje }}%</small>
+                    </td>
+                    <td>{{ meta.fecha_limite }}</td>
+                    <td>{{ meta.cuenta_relacionada.nombre }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">
+                        No hay metas registradas.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal Crear Meta -->
+    <div class="modal fade" id="crearMetaModal" tabindex="-1" aria-labelledby="crearMetaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color:#0f223a; color:#fff;">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title text-info"><i class="bi bi-bullseye"></i> Nueva meta de ahorro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="/crear_meta/">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la meta</label>
+                            <input type="text" name="nombre" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Monto objetivo</label>
+                            <input type="number" name="monto_objetivo" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Monto actual</label>
+                            <input type="number" name="monto_actual" class="form-control" value="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Fecha límite</label>
+                            <input type="date" name="fecha_limite" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Cuenta asociada</label>
+                            <select name="cuenta_relacionada" class="form-select" required>
+                                {% for cuenta in cuentas %}
+                                <option value="{{ cuenta.id }}">{{ cuenta.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-secondary">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-main">Guardar meta</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

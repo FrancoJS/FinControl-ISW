@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from gestion.models import Usuario
-from gestion.servicios import cuentas
-from gestion.servicios import transacciones
+from gestion.servicios import metas, cuentas
+from gestion.models import Cuenta
 
 def registro(request):
     datos = {}
@@ -80,16 +80,33 @@ def crear_cuenta(request):
     else:
         resultado["cuentas"] = cuentas.obtener_cuentas()
         return render(request, 'cuenta/cuenta-page.html', resultado)
-def transacciones_page(request):
-    # obtener id del usuario actual
-    usuario_id = request.session.get('id_usuario')
 
-    # obtener transacciones desde la capa de servicios
-    lista_transacciones = transacciones.obtener_transacciones(usuario_id)
 
-    # estructura del contexto
-    datos = {
-        "transacciones": lista_transacciones,
-    }
+def metas_page(request):
+    id_usuario = request.session.get('id_usuario')
+    lista_metas = metas.obtener_metas(id_usuario)
+    lista_cuentas = cuentas.obtener_cuentas(id_usuario)
+    return render(request, 'metas/metas-page.html', {
+        'metas': lista_metas,
+        'cuentas': lista_cuentas
+    })
 
-    return render(request, 'transacciones/transacciones-page.html', datos)
+
+def crear_meta(request):
+    if request.method == 'POST':
+        resultado = metas.crear_meta(request)
+        usuario_id = request.session.get('id_usuario')
+        lista_metas = metas.obtener_metas(usuario_id)
+        cuentas_usuario = Cuenta.objects.filter(usuario_id=usuario_id)
+
+        datos = {
+            "metas": lista_metas,
+            "cuentas": cuentas_usuario,
+        }
+
+        if resultado["success"]:
+            datos["r"] = resultado["mensaje"]
+        else:
+            datos["r2"] = resultado["mensaje"]
+
+        return render(request, 'metas/metas-page.html', datos)

@@ -32,7 +32,7 @@ def iniciar_sesion(request):
     if request.method == 'POST':
         email = request.POST['email'].strip()
         contraseña = request.POST['password'].strip()
-        usuario = Usuario.objects.filter(email=email, contraseña=contraseña).first()
+        usuario = Usuario.objects.filter(email=email, contraseña=contraseña).first()
         if usuario:
             request.session['usuario_id'] = usuario.id
             request.session['nombre_usuario'] = usuario.nombre
@@ -84,6 +84,39 @@ def crear_cuenta(request):
     else:
         resultado["cuentas"] = cuentas.obtener_cuentas(usuario_id=usuario_id)
         return render(request, 'cuenta/cuenta-page.html', resultado)
+    
+def modificar_cuenta(request):
+    resultado = {}
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
+        resultado["success"] = False
+        resultado["mensaje"] = "Sesión expirada. Inicia sesión nuevamente."
+        return render(request, 'Usuarios/iniciar_sesion.html', resultado)
+
+    if request.method == 'POST':
+        id_cuenta = request.POST.get('id')
+        nombre = request.POST.get('nombre')
+
+        # Validar entrada
+        if not id_cuenta or not nombre:
+            resultado["success"] = False
+            resultado["mensaje"] = "Datos incompletos para modificar la cuenta."
+        else:
+            respuesta = cuentas.modificar_cuenta(id_cuenta, nombre, usuario_id)
+            resultado["success"] = respuesta["success"]
+            resultado["mensaje"] = respuesta["mensaje"]
+
+        resultado["cuentas"] = cuentas.obtener_cuentas(usuario_id)
+        return render(request, 'cuenta/cuenta-page.html', resultado)
+
+
+    resultado["cuentas"] = cuentas.obtener_cuentas(usuario_id)
+    return render(request, 'cuenta/cuenta-page.html', resultado)
+
+def landing_page(request):
+    return render(request, 'landing-page/landing.html')
+
 
 def transacciones_page(request):
     # obtener id del usuario actual

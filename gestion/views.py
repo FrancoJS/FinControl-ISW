@@ -15,17 +15,20 @@ def registro(request):
             datos = {
                 'r2': 'La contraseña debe tener al menos 8 caracteres.'
             }
+            return render(request, 'Usuarios/registro.html', datos)
         else:
-            nuevo = Usuario(nombre=nombre, apellido=apellido, email=email, contraseña=contraseña)
-            nuevo.save()
+            usuario = Usuario(nombre=nombre, apellido=apellido, email=email, contraseña=contraseña)
+            usuario.save()
+            request.session['usuario_id'] = usuario.id
+            request.session['nombre_usuario'] = usuario.nombre
+            request.session['estado_sesion'] = True
             datos = {
                 'nombre': nombre,
-                'apellido': apellido,
-                'email': email,
-                'contraseña': contraseña,
                 'r': 'Registrado correctamente!'
             }
-    return render(request, 'Usuarios/registro.html', datos)
+            return render(request, 'cuenta/cuenta-page.html', datos)
+
+    return render(request, 'Usuarios/registro.html')
 
 def iniciar_sesion(request):
     datos = {}
@@ -50,6 +53,10 @@ def iniciar_sesion(request):
 
     return render(request, 'Usuarios/iniciar_sesion.html',datos)
 
+
+def cerrar_sesion(request):
+    request.session.flush()
+    return render(request, 'Usuarios/iniciar_sesion.html')
 
 def landing_page(request):
     return render(request, 'landing-page/landing.html')
@@ -86,15 +93,7 @@ def crear_cuenta(request):
         return render(request, 'cuenta/cuenta-page.html', resultado)
 
 def transacciones_page(request):
-    # obtener id del usuario actual
     usuario_id = request.session.get('id_usuario')
 
-    # obtener transacciones desde la capa de servicios
-    lista_transacciones = transacciones.obtener_transacciones(usuario_id)
 
-    # estructura del contexto
-    datos = {
-        "transacciones": lista_transacciones,
-    }
-
-    return render(request, 'transacciones/transacciones-page.html', datos)
+    return render(request, 'transacciones/transacciones-page.html')

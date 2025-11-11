@@ -195,14 +195,14 @@
 </style>
 <div class="sidebar">
 	<h4>FinControl</h4>
-	<a href="/cuenta/" class="active"><i class="bi bi-wallet2"></i><span>Cuentas</span></a>
-	<a href="#"><i class="bi bi-arrow-left-right"></i><span>Transacciones</span></a>
+	<a href="/cuenta/"><i class="bi bi-wallet2"></i><span>Cuentas</span></a>
+	<a href="/transacciones/"><i class="bi bi-arrow-left-right"></i><span>Transacciones</span></a>
 	<a href="#"><i class="bi bi-bullseye"></i><span>Metas de ahorro</span></a>
 	<a href="#"><i class="bi bi-repeat"></i><span>Recurrentes</span></a>
 	<a href="#"><i class="bi bi-bar-chart"></i><span>Reportes</span></a>
 	<hr style="border-color: #133b5c" />
 	<a href="#"><i class="bi bi-person-circle"></i><span>Usuario</span></a>
-	<a href=""><i class="bi bi-box-arrow-right"></i><span>Cerrar sesión</span></a>
+	<a href="/cerrar-sesion/"><i class="bi bi-box-arrow-right"></i><span>Cerrar sesión</span></a>
 </div>
 <div class="topbar">
 	<div class="brand">
@@ -211,6 +211,19 @@
 	</div>
 	<div class="user"><i class="bi bi-person"></i> {{ user.username }}</div>
 </div>
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const currentPath = window.location.pathname;
+		const links = document.querySelectorAll('.sidebar a');
+
+		links.forEach((link) => {
+			// Si el href del enlace coincide con la URL actual, le agrega la clase 'active'
+			if (link.getAttribute('href') === currentPath) {
+				link.classList.add('active');
+			}
+		});
+	});
+</script>
 
 <script>
 	/* Pequeño helper: si quieres abrir el overlay desde la plantilla hija con id="openOverlay",

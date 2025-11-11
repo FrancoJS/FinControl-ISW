@@ -23,29 +23,12 @@
             top: 0;
             left: 0;
             height: 100vh;
-            width: 280px; /* más ancho */
+            width: 280px;
             background-color: #0f223a;
             border-right: 1px solid #133b5c;
             padding-top: 70px;
-            transition: all 0.35s ease;
             box-shadow: 4px 0 10px rgba(0, 0, 0, 0.4);
             z-index: 999;
-        }
-
-        .sidebar.collapsed {
-            width: 90px; /* más ancho en colapsado también */
-        }
-
-        .sidebar h4 {
-            color: #00b4d8;
-            font-size: 1.4rem;
-            text-align: center;
-            margin-bottom: 35px;
-            transition: opacity 0.3s;
-        }
-
-        .sidebar.collapsed h4 {
-            opacity: 0;
         }
 
         .sidebar a {
@@ -60,20 +43,17 @@
             font-size: 1.05rem;
         }
 
-        .sidebar i {
-            font-size: 1.25rem;
-            min-width: 30px;
-            text-align: center;
-        }
-
-        .sidebar a:hover,
-        .sidebar a.active {
+        .sidebar a.active,
+        .sidebar a:hover {
             background-color: #133b5c;
             color: #ffee58;
         }
 
-        .sidebar.collapsed a span {
-            display: none;
+        .sidebar h4 {
+            color: #00b4d8;
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 35px;
         }
 
         /* Topbar */
@@ -90,12 +70,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 25px;
-            transition: left 0.35s ease;
             z-index: 1000;
-        }
-
-        .topbar.shifted {
-            left: 90px;
         }
 
         .topbar .brand {
@@ -104,17 +79,6 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 1.2rem;
-        }
-
-        .topbar .brand i {
-            cursor: pointer;
-            color: #00b4d8;
-            transition: transform 0.2s;
-        }
-
-        .topbar .brand i:hover {
-            transform: scale(1.1);
         }
 
         .topbar .user {
@@ -126,23 +90,13 @@
             margin-left: 280px;
             margin-top: 80px;
             padding: 30px;
-            transition: margin-left 0.35s ease;
         }
 
-        .main-content.shifted {
-            margin-left: 90px;
-        }
-
-        /* Cards & sections */
         .card {
             background-color: #0f223a;
             border: 1px solid #133b5c;
             border-radius: 10px;
             color: #e0f7fa;
-        }
-
-        .card h5 {
-            color: #00e1ff;
         }
 
         .btn-main {
@@ -172,47 +126,102 @@
             background-color: #061320;
             border-top: 1px solid #133b5c;
             margin-left: 280px;
-            transition: margin-left 0.35s ease;
         }
 
-        footer.shifted {
-            margin-left: 90px;
+        /* Overlay (Modal personalizado) */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(15, 34, 58, 0.35), rgba(6, 19, 32, 0.55));
+            backdrop-filter: blur(3px);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+
+
+        .overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        .overlay .form-container {
+            background-color: rgba(10, 25, 47, 0.9);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+            border: 1px solid #133b5c;
+            width: 400px;
+        }
+
+        .overlay h2 {
+            color: #00b4d8;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .overlay .form-control {
+            background-color: #0a192f;
+            border: 1px solid #133b5c;
+            color: #fff;
+        }
+
+        .overlay .btn-main {
+            width: 100%;
+        }
+
+        .overlay .close-btn {
+            color: #8fa3b0;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .overlay .close-btn:hover {
+            color: #ffee58;
         }
     </style>
 </head>
 
 <body>
-
     <!-- Sidebar -->
-    <div id="sidebar" class="sidebar">
+    <div class="sidebar">
         <h4>FinControl</h4>
-        <a href="#cuentas" class="active"><i class="bi bi-wallet2"></i><span>Cuentas</span></a>
-        <a href="#transacciones"><i class="bi bi-arrow-left-right"></i><span>Transacciones</span></a>
-        <a href="#metas"><i class="bi bi-bullseye"></i><span>Metas de ahorro</span></a>
-        <a href="#recurrentes"><i class="bi bi-repeat"></i><span>Recurrentes</span></a>
-        <a href="#reportes"><i class="bi bi-bar-chart"></i><span>Reportes</span></a>
+        <a href="#" class="active"><i class="bi bi-wallet2"></i><span>Cuentas</span></a>
+        <a href="#"><i class="bi bi-arrow-left-right"></i><span>Transacciones</span></a>
+        <a href="#"><i class="bi bi-bullseye"></i><span>Metas de ahorro</span></a>
+        <a href="#"><i class="bi bi-repeat"></i><span>Recurrentes</span></a>
+        <a href="#"><i class="bi bi-bar-chart"></i><span>Reportes</span></a>
         <hr style="border-color:#133b5c;">
-        <a href="#usuario"><i class="bi bi-person-circle"></i><span>Usuario</span></a>
+        <a href="#"><i class="bi bi-person-circle"></i><span>Usuario</span></a>
         <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i><span>Cerrar sesión</span></a>
     </div>
 
     <!-- Topbar -->
-    <div id="topbar" class="topbar">
+    <div class="topbar">
         <div class="brand">
-            <i id="toggleSidebar" class="bi bi-list"></i>
+            <i class="bi bi-list"></i>
             <span>Panel de control</span>
         </div>
         <div class="user"><i class="bi bi-person"></i> {{ user.username }}</div>
     </div>
 
-    <!-- Main content -->
-    <div id="main" class="main-content">
+    <!-- Main -->
+    <div class="main-content">
         <div class="container-fluid">
-
-            <!-- Cuentas -->
             <h3 id="cuentas" class="section-title"><i class="bi bi-wallet2"></i> Cuentas bancarias</h3>
             <div class="d-flex justify-content-end mb-3">
-                <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#crearCuentaModal">
+                <button id="openOverlay" class="btn btn-main">
                     <i class="bi bi-plus-circle"></i> Nueva cuenta
                 </button>
             </div>
@@ -221,9 +230,9 @@
                 <table class="table table-dark table-hover align-middle">
                     <thead>
                         <tr class="text-info">
-                            <th><i class="bi bi-bank"></i> Nombre</th>
-                            <th><i class="bi bi-cash-stack"></i> Saldo</th>
-                            <th><i class="bi bi-person"></i> Usuario</th>
+                            <th>Nombre</th>
+                            <th>Saldo</th>
+                            <th>Usuario</th>
                             <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -239,9 +248,7 @@
                             </td>
                         </tr>
                         {% empty %}
-                        <tr>
-                            <td colspan="4" class="text-center text-muted">No hay cuentas registradas.</td>
-                        </tr>
+                        <tr><td colspan="4" class="text-center text-muted">No hay cuentas registradas.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -249,34 +256,68 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer id="footer">
-        © 2025 FinControl — Panel de gestión financiera
-    </footer>
+    <footer>© 2025 FinControl — Panel de gestión financiera</footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!--
+
+    {% if r %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ r }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    
+    {% elif r2 %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ r2 }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %} -->
+
+    <div id="overlay" class="overlay">
+        <div class="form-container">
+            <h2><i class="bi bi-wallet2"></i> Crear Nueva Cuenta</h2>
+    
+            <form method="POST" action="{% url 'crear_cuenta' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-bank"></i> Nombre de la cuenta</label>
+                    <select name="nombre" class="form-select" required>
+                        <option value="">Seleccione nombre</option>
+                        {% for n in opcionesNombres %}
+                        <option value="{{ n.id }}">{{ n.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-cash-stack"></i> Saldo inicial</label>
+                    <select name="saldo" class="form-select" required>
+                        <option value="">Seleccione saldo</option>
+                        {% for s in opcionesSaldos %}
+                        <option value="{{ s.id }}">{{ s.valor }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                <button type="submit" class="btn btn-main">
+                    <i class="bi bi-plus-circle"></i> Registrar cuenta
+                </button>
+            </form>
+    
+            <a href="#" id="closeOverlay" class="close-btn">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </a>
+        </div>
+    </div>
+
+
     <script>
-        const sidebar = document.getElementById('sidebar');
-        const topbar = document.getElementById('topbar');
-        const main = document.getElementById('main');
-        const footer = document.getElementById('footer');
-        const toggleBtn = document.getElementById('toggleSidebar');
+        const overlay = document.getElementById('overlay');
+        const openBtn = document.getElementById('openOverlay');
+        const closeBtn = document.getElementById('closeOverlay');
 
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            topbar.classList.toggle('shifted');
-            main.classList.toggle('shifted');
-            footer.classList.toggle('shifted');
-
-            // Cambia el ícono del botón según estado
-            if (sidebar.classList.contains('collapsed')) {
-                toggleBtn.classList.remove('bi-list');
-                toggleBtn.classList.add('bi-arrow-right-circle');
-            } else {
-                toggleBtn.classList.remove('bi-arrow-right-circle');
-                toggleBtn.classList.add('bi-list');
-            }
-        });
+        openBtn.addEventListener('click', () => overlay.classList.add('active'));
+        closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
     </script>
 </body>
 </html>

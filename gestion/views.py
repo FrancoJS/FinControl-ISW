@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from gestion.models import Usuario
+from gestion.servicios import cuentas
 
-def landing(request):
-    return render(request, 'LandingPage/landing.html')
 def registro(request):
     datos = {}
     if request.method == 'POST':
@@ -45,7 +44,37 @@ def iniciar_sesion(request):
             datos = {
                 'r2': 'Credenciales incorrectas'
             }
-            
+
     return render(request, 'Usuarios/iniciar_sesion.html',datos)
-def dashboard(request):
-    pass
+
+
+def landing_page(request):
+    return render(request, 'landing-page/landing.html')
+
+def cuenta_page(request):
+    lista_cuentas = cuentas.obtener_cuentas()
+
+    lista = {
+        "cuentas": lista_cuentas
+    }
+    return render(request, 'cuenta/cuenta-page.html', lista)
+
+def crear_cuenta(request):
+    resultado = {}
+    if request.method == 'POST':
+        respuesta = cuentas.crear_cuenta(request)
+
+        if respuesta["success"] == False:
+            resultado["success"] = False
+            resultado["mensaje"] = respuesta["mensaje"]
+        else:
+            resultado["success"] = True
+            resultado["mensaje"] = respuesta["mensaje"]
+
+        resultado["cuentas"] = cuentas.obtener_cuentas()
+
+        return render(request, 'cuenta/cuenta-page.html', resultado)
+    else:
+        resultado["cuentas"] = cuentas.obtener_cuentas()
+        return render(request, 'cuenta/cuenta-page.html', resultado)
+

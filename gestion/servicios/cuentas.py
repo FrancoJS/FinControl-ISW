@@ -1,11 +1,27 @@
-from gestion import models
+from gestion.models import Cuenta
 
-def crearCuenta(request):
-    
+def crear_cuenta(request):
     try:
-        if request.method == 'POST':
-            nombre = request.POST.get('nombre')
-            saldo = request.POST.get('saldo')
+        nombre = request.POST['nombre']
+        saldo = request.POST['saldo']
+        cuenta = Cuenta(nombre=nombre, saldo=saldo, usuario_id=1)
+        cuenta.save()
+        return {
+            "success": True,
+            "mensaje": "¡Cuenta creada correctamente!",
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "mensaje": "Ocurrió un error al crear la cuenta"
+        }
 
-    except:
-        pass
+def obtener_cuentas():
+    try:
+        cuentas = Cuenta.objects.filter(usuario_id=1).order_by('-id')
+        return cuentas
+    except Exception as e:
+        return {
+            "success": False,
+            "mensaje": "Ocurrio un error al obtener las cuentas"
+        }

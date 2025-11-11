@@ -34,12 +34,12 @@ def iniciar_sesion(request):
         contraseña = request.POST['password'].strip()
         usuario = Usuario.objects.filter(email=email, contraseña=contraseña).first()
         if usuario:
-            request.session['id_usuario'] = usuario.id
+            request.session['usuario_id'] = usuario.id
             request.session['nombre_usuario'] = usuario.nombre
-            listar_cuentas = cuentas.obtener_cuentas()
+            request.session['estado_sesion'] = True
+            listar_cuentas = cuentas.obtener_cuentas(usuario.id)
             datos = {
                 'email': email,
-                'contraseña': contraseña,
                 'cuentas': listar_cuentas
             }
             return render(request, 'cuenta/cuenta-page.html', datos)
@@ -55,7 +55,8 @@ def landing_page(request):
     return render(request, 'landing-page/landing.html')
 
 def cuenta_page(request):
-    lista_cuentas = cuentas.obtener_cuentas()
+    usuario_id = request.session.get('usuario_id')
+    lista_cuentas = cuentas.obtener_cuentas(usuario_id)
 
     lista = {
         "cuentas": lista_cuentas
@@ -64,8 +65,11 @@ def cuenta_page(request):
 
 def crear_cuenta(request):
     resultado = {}
+    usuario_id = request.session.get('usuario_id')
     if request.method == 'POST':
-        respuesta = cuentas.crear_cuenta(request)
+        nombre = request.POST['nombre']
+        saldo = request.POST['saldo']
+        respuesta = cuentas.crear_cuenta(nombre, saldo, usuario_id)
 
         if respuesta["success"] == False:
             resultado["success"] = False
@@ -74,12 +78,13 @@ def crear_cuenta(request):
             resultado["success"] = True
             resultado["mensaje"] = respuesta["mensaje"]
 
-        resultado["cuentas"] = cuentas.obtener_cuentas()
+        resultado["cuentas"] = cuentas.obtener_cuentas(usuario_id)
 
         return render(request, 'cuenta/cuenta-page.html', resultado)
     else:
-        resultado["cuentas"] = cuentas.obtener_cuentas()
+        resultado["cuentas"] = cuentas.obtener_cuentas(usuario_id=usuario_id)
         return render(request, 'cuenta/cuenta-page.html', resultado)
+
 def transacciones_page(request):
     # obtener id del usuario actual
     usuario_id = request.session.get('id_usuario')

@@ -35,11 +35,13 @@ def iniciar_sesion(request):
         if usuario:
             request.session['id_usuario'] = usuario.id
             request.session['nombre_usuario'] = usuario.nombre
+            listar_cuentas = cuentas.obtener_cuentas()
             datos = {
                 'email': email,
                 'contraseña': contraseña,
+                'cuentas': listar_cuentas
             }
-            return render(request, 'Dashboard/dashboard.html', datos)
+            return render(request, 'cuenta/cuenta-page.html', datos)
         else:
             datos = {
                 'r2': 'Credenciales incorrectas'

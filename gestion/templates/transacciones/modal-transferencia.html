@@ -5,10 +5,10 @@
 				<h5 class="modal-title"><i class="bi bi-arrow-left-right"></i> Transferencia</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
-			<form method="post" action="">
+			<form method="post" action="/crear-transaccion/">
 				{% csrf_token %}
 				<div class="modal-body">
-					<input type="hidden" name="tipo" value="T" />
+					<input type="hidden" name="tipo" value="TRANSFERENCIA" />
 					<div class="mb-3">
 						<label class="form-label">Cuenta origen</label>
 						<select name="cuenta_origen" class="form-select" required>

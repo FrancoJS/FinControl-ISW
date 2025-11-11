@@ -93,7 +93,43 @@ def crear_cuenta(request):
         return render(request, 'cuenta/cuenta-page.html', resultado)
 
 def transacciones_page(request):
-    usuario_id = request.session.get('id_usuario')
+    usuario_id = request.session.get('usuario_id')
+    lista_cuentas = cuentas.obtener_cuentas(usuario_id)
+    print(lista_cuentas)
+    resultado = {
+        "cuentas": lista_cuentas,
+        "transacciones": transacciones.obtener_transacciones(usuario_id)
+    }
+    return render(request, 'transacciones/transacciones-page.html', resultado)
+
+def crear_transaccion(request):
+    if request.method == 'POST' and request.session.get('estado_sesion') == True:
+        cuenta_origen = request.POST.get('cuenta_origen')
+        cuenta_destino = request.POST.get('cuenta_destino')
+        print(cuenta_destino)
+        print(cuenta_origen)
+        monto = request.POST.get('monto')
+        descripcion = request.POST.get('descripcion')
+        tipo = request.POST.get('tipo')
+
+        transaccion = {
+            'cuenta_origen': cuenta_origen,
+            'cuenta_destino': cuenta_destino,
+            'monto': monto,
+            'descripcion': descripcion,
+            'tipo': tipo
+        }
+
+        nueva_transaccion = transacciones.crear_transaccion(transaccion)
+        usuario_id = request.session.get('usuario_id')
+        lista_cuentas = cuentas.obtener_cuentas(usuario_id)
+        lista_transacciones = transacciones.obtener_transacciones(usuario_id)
+        print(lista_transacciones)
+        resultado = {
+            "transacciones": lista_transacciones,
+            "cuentas": lista_cuentas
+        }
+
+        return render(request, 'transacciones/transacciones-page.html', resultado)
 
 
-    return render(request, 'transacciones/transacciones-page.html')

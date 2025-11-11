@@ -356,7 +356,6 @@
 									<th>Cuenta destino</th>
 									<th>Descripción</th>
 									<th class="text-end">Monto</th>
-									<th class="text-center">Acciones</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -364,9 +363,9 @@
 								<tr>
 									<td>{{ t.fecha|date:"d/m/Y H:i" }}</td>
 									<td>
-										{% if t.tipo == 'I' %}
+										{% if t.tipo == 'INGRESO' %}
 										<span class="badge bg-success">Ingreso</span>
-										{% elif t.tipo == 'E' %}
+										{% elif t.tipo == 'EGRESO' %}
 										<span class="badge bg-danger">Egreso</span>
 										{% else %}
 										<span class="badge bg-primary">Transferencia</span>
@@ -376,16 +375,6 @@
 									<td>{% if t.cuenta_destino %}{{ t.cuenta_destino.nombre }}{% else %}-{% endif %}</td>
 									<td>{{ t.descripcion|default:"-" }}</td>
 									<td class="text-end">${{ t.monto|floatformat:0 }}</td>
-									<td class="text-center">
-										<form method="post" class="d-inline">
-											{% csrf_token %}
-											<input type="hidden" name="accion" value="eliminar" />
-											<input type="hidden" name="transaccion_id" value="{{ t.id }}" />
-											<button class="btn btn-sm btn-outline-danger" type="submit" title="Eliminar">
-												<i class="bi bi-trash"></i>
-											</button>
-										</form>
-									</td>
 								</tr>
 								{% empty %}
 								<tr>
@@ -413,7 +402,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for tr in transferencias %}
+								{% for tr in transacciones %}
 								<tr>
 									<td>{{ tr.fecha|date:"d/m/Y H:i" }}</td>
 									<td>{{ tr.cuenta_origen.nombre }}</td>

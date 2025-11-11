@@ -5,13 +5,13 @@
 				<h5 class="modal-title"><i class="bi bi-plus-circle"></i> Nuevo ingreso</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
-			<form method="post" action="">
+			<form method="post" action="/crear-transaccion/">
 				{% csrf_token %}
 				<div class="modal-body">
-					<input type="hidden" name="tipo" value="I" />
+					<input type="hidden" name="tipo" value="INGRESO" />
 					<div class="mb-3">
-						<label class="form-label">Cuenta</label>
-						<select name="cuenta_origen" class="form-select" required>
+						<label class="form-label">Cuenta de destino</label>
+						<select name="cuenta_destino" class="form-select" required>
 							<option value="">Selecciona una cuenta</option>
 							{% for c in cuentas %}
 							<option value="{{ c.id }}">{{ c.nombre }} — ${{ c.saldo|floatformat:0 }}</option>

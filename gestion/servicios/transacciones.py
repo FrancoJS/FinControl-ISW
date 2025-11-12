@@ -7,14 +7,14 @@ def crear_transaccion(transaccion):
         transaccion.save()
         return {
             'success': True,
-            'message': 'Transaccion creada correctamente',
+            'mensaje': 'Transaccion creada correctamente',
             'transaccion': transaccion
         }
     except Exception as e:
         print(e)
         return {
             'success': False,
-            'message': 'Ocurrio un error al crear la transaccion'
+            'mensaje': 'Ocurrio un error al crear la transaccion'
         }
 
 def obtener_transacciones(usuario_id):
@@ -24,5 +24,5 @@ def obtener_transacciones(usuario_id):
     except Exception as e:
         return {
             'success': False,
-            'message': 'Ocurrio un error al obtener las transacciones'
+            'mensaje': 'Ocurrio un error al obtener las transacciones'
         }

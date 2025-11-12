@@ -308,6 +308,23 @@
 					padding: 20px;
 				}
 			}
+			/* Cambiar color de la X de cierre en alertas */
+			.alert .btn-close {
+				filter: none !important; /* Elimina el filtro blanco de Bootstrap */
+				opacity: 0.7;
+			}
+
+			.alert-success .btn-close {
+				color: #155724; /* Verde oscuro para éxito */
+			}
+
+			.alert-danger .btn-close {
+				color: #721c24; /* Rojo oscuro para error */
+			}
+
+			.alert .btn-close:hover {
+				opacity: 1;
+			}
 		</style>
 	</head>
 	<body class="sidebar-open">

@@ -123,14 +123,13 @@ def crear_transaccion(request):
             'usuario': usuario_id
         }
 
-        nueva_transaccion = transacciones.crear_transaccion(transaccion)
+        resultado = transacciones.crear_transaccion(transaccion)
         lista_cuentas = cuentas.obtener_cuentas(usuario_id)
         lista_transacciones = transacciones.obtener_transacciones(usuario_id)
-        print(lista_transacciones)
-        resultado = {
-            "transacciones": lista_transacciones,
-            "cuentas": lista_cuentas
-        }
+
+        resultado["transacciones"] = lista_transacciones
+        resultado["cuentas"] = lista_cuentas
+
 
         return render(request, 'transacciones/transacciones-page.html', resultado)
 

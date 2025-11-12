@@ -70,31 +70,43 @@ class Transaccion(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
     def clean(self):
-        # Validaciones básicas según tipo
+    # --- Validaciones básicas por tipo ---
         if self.tipo == 'INGRESO' and self.cuenta_origen:
             raise ValidationError("Un ingreso no debe tener cuenta de origen.")
+
         if self.tipo == 'EGRESO' and self.cuenta_destino:
             raise ValidationError("Un egreso no debe tener cuenta de destino.")
+
+    # --- Validaciones para TRANSFERENCIA ---
         if self.tipo == 'TRANSFERENCIA':
-            # Debe tener origen y destino, que pueden ser cuenta o meta
-            origen_valido = self.cuenta_origen or self.meta_ahorro
-            destino_valido = self.cuenta_destino or self.meta_ahorro
-            if not origen_valido or not destino_valido:
-                raise ValidationError("Una transferencia requiere origen y destino.")
+        # Requiere un origen
+            if not (self.cuenta_origen or self.meta_ahorro):
+                raise ValidationError("Una transferencia debe tener una cuenta o meta de ahorro de origen.")
+
+        # Requiere un destino
+            if not (self.cuenta_destino or self.meta_ahorro):
+                raise ValidationError("Una transferencia debe tener una cuenta o meta de ahorro de destino.")
+
+        # No puede tener origen y destino vacíos o idénticos
             if (self.cuenta_origen and self.cuenta_destino) and (self.cuenta_origen == self.cuenta_destino):
                 raise ValidationError("No puedes transferir a la misma cuenta.")
-            if (self.meta_ahorro and self.cuenta_origen) and (self.meta_ahorro == self.cuenta_origen):
-                raise ValidationError("No puedes transferir a la misma entidad.")
-        # Validación de saldo en origen
+
+            if self.meta_ahorro and (
+                (self.cuenta_origen and self.meta_ahorro == self.cuenta_origen) or
+                (self.cuenta_destino and self.meta_ahorro == self.cuenta_destino)):
+                raise ValidationError("No puedes transferir entre la misma meta y cuenta.")
+
+    # --- Validación de saldo en origen ---
         if self.tipo in ('EGRESO', 'TRANSFERENCIA'):
             if self.cuenta_origen and self.cuenta_origen.saldo < self.monto:
                 raise ValidationError("Saldo insuficiente en la cuenta de origen.")
-            if self.meta_ahorro and self.meta_ahorro.monto_actual < self.monto:
-                raise ValidationError("Saldo insuficiente en la meta de ahorro de origen.")
-        # Validación de límites en meta de ahorro destino
+
+
+    # --- Validación de límites de meta de ahorro destino ---
         if self.meta_ahorro and self.tipo in ('INGRESO', 'TRANSFERENCIA'):
             if self.meta_ahorro.monto_actual + self.monto > self.meta_ahorro.monto_objetivo:
                 raise ValidationError("No puedes sobrepasar el monto objetivo de la meta de ahorro.")
+
 
     def save(self, *args, **kwargs):
         self.full_clean()  # Llama a clean()

@@ -15,15 +15,25 @@
 							<option value="">Selecciona cuenta origen</option>
 							{% for c in cuentas %}
 							<option value="{{ c.id }}">{{ c.nombre }} — ${{ c.saldo|floatformat:0 }}</option>
+
 							{% endfor %}
 						</select>
 					</div>
 					<div class="mb-3">
 						<label class="form-label">Cuenta destino</label>
-						<select name="cuenta_destino" class="form-select" required>
+						<select name="cuenta_destino" class="form-select">
 							<option value="">Selecciona cuenta destino</option>
 							{% for c in cuentas %}
 							<option value="{{ c.id }}">{{ c.nombre }} — ${{ c.saldo|floatformat:0 }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Transferir a Meta de ahorro</label>
+						<select name="meta_ahorro" class="form-select">
+							<option value="">Selecciona una meta</option>
+							{% for m in metas %}
+							<option value="{{ m.id }}">{{ m.nombre }} — ${{ m.monto_actual|floatformat:0 }}</option>
 							{% endfor %}
 						</select>
 					</div>

@@ -351,125 +351,158 @@
 			.table th {
 				vertical-align: middle;
 			}
+			html,
+			body {
+				height: 100%;
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+			}
+
+			.page-wrapper {
+				display: flex;
+				flex-direction: column;
+				min-height: 100vh;
+			}
+
+			.main-content {
+				flex: 1; /* ocupa el espacio restante */
+				margin-top: 80px;
+				padding: 30px;
+			}
+
+			footer {
+				text-align: center;
+				padding: 20px;
+				color: #8fa3b0;
+				background-color: #061320;
+				border-top: 1px solid #133b5c;
+			}
 		</style>
 	</head>
 	<body class="sidebar-open">
 		<!-- Sidebar -->
 		{% include "dashboard/dashboard.html" %}
 
-		<!-- Main -->
-		<div class="main-content">
-			<div class="container-fluid">
-				{% if mensaje and success == True %}
-				<div class="alert alert-success alert-dismissible fade show" role="alert">
-					{{ mensaje }}
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-				</div>
-				{% endif %} {% if mensaje and success == False %}
-				<div class="alert alert-danger alert-dismissible fade show" role="alert">
-					{{ mensaje }}
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-				</div>
-				{% endif %}
-
-				<h3 class="section-title"><i class="bi bi-cash"></i> Transacciones</h3>
-
-				<div class="d-flex gap-2 justify-content-end mb-3">
-					<button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#modalIngreso">
-						<i class="bi bi-plus-circle"></i> Nuevo ingreso
-					</button>
-					<button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#modalEgreso">
-						<i class="bi bi-dash-circle"></i> Nuevo egreso
-					</button>
-					<button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#modalTransferencia">
-						<i class="bi bi-arrow-left-right"></i> Transferencia
-					</button>
-				</div>
-
-				<!-- Historial general de transacciones -->
-				<div class="card p-3 mb-4">
-					<h5 class="mb-3 text-info fw-semibold"><i class="bi bi-clock-history me-2"></i> Historial de Transacciones</h5>
-
-					<div class="table-responsive custom-table-container">
-						<table class="table table-dark table-hover align-middle mb-0 rounded-3 overflow-hidden">
-							<thead class="table-gradient">
-								<tr class="text-info">
-									<th>Fecha</th>
-									<th>Tipo</th>
-									<th>Cuenta origen</th>
-									<th>Cuenta destino</th>
-									<th>Descripción</th>
-									<th class="text-end">Monto</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for t in transacciones %}
-								<tr>
-									<td>{{ t.fecha|date:"d/m/Y H:i" }}</td>
-									<td>
-										{% if t.tipo == 'INGRESO' %}
-										<span class="badge bg-success bg-opacity-75">Ingreso</span>
-										{% elif t.tipo == 'EGRESO' %}
-										<span class="badge bg-danger bg-opacity-75">Egreso</span>
-										{% else %}
-										<span class="badge bg-primary bg-opacity-75">Transferencia</span>
-										{% endif %}
-									</td>
-									<td>{% if t.cuenta_origen %}{{ t.cuenta_origen.nombre }}{% else %}-{% endif %}</td>
-									<td>{% if t.cuenta_destino %}{{ t.cuenta_destino.nombre }}{% else %}-{% endif %}</td>
-									<td>{{ t.descripcion|default:"-" }}</td>
-									<td class="text-end fw-semibold">${{ t.monto|floatformat:0 }}</td>
-								</tr>
-								{% empty %}
-								<tr>
-									<td colspan="6" class="text-center text-muted py-4">No hay transacciones registradas.</td>
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
+		<div class="page-wrapper">
+			<!-- Main -->
+			<div class="main-content">
+				<div class="container-fluid">
+					{% if mensaje and success == True %}
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						{{ mensaje }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 					</div>
-				</div>
-
-				<!-- Solo transferencias (opcional: lista de transferencias) -->
-				{% if transferencias %}
-				<div class="card p-3 mb-4">
-					<h5 class="mb-3 text-info fw-semibold"><i class="bi bi-arrow-left-right me-2"></i> Historial de Transferencias</h5>
-
-					<div class="table-responsive custom-table-container">
-						<table class="table table-dark table-hover align-middle mb-0 rounded-3 overflow-hidden">
-							<thead class="table-gradient">
-								<tr class="text-info">
-									<th>Fecha</th>
-									<th>Cuenta origen</th>
-									<th>Cuenta destino</th>
-									<th>Descripción</th>
-									<th class="text-end">Monto</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for tr in transacciones %}
-								<tr>
-									<td>{{ tr.fecha|date:"d/m/Y H:i" }}</td>
-									<td>{% if tr.cuenta_origen %}{{ tr.cuenta_origen.nombre }}{% else %}-{% endif %}</td>
-									<td>{% if tr.cuenta_destino %}{{ tr.cuenta_destino.nombre }}{% else %}-{% endif %}</td>
-									<td>{{ tr.descripcion|default:"-" }}</td>
-									<td class="text-end fw-semibold">${{ tr.monto|floatformat:0 }}</td>
-								</tr>
-								{% empty %}
-								<tr>
-									<td colspan="5" class="text-center text-muted py-4">No hay transferencias registradas.</td>
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
+					{% endif %} {% if mensaje and success == False %}
+					<div class="alert alert-danger alert-dismissible fade show" role="alert">
+						{{ mensaje }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 					</div>
-				</div>
+					{% endif %}
 
-				{% endif %}
+					<h3 class="section-title"><i class="bi bi-cash"></i> Transacciones</h3>
+
+					<div class="d-flex gap-2 justify-content-end mb-3">
+						<button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#modalIngreso">
+							<i class="bi bi-plus-circle"></i> Nuevo ingreso
+						</button>
+						<button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#modalEgreso">
+							<i class="bi bi-dash-circle"></i> Nuevo egreso
+						</button>
+						<button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#modalTransferencia">
+							<i class="bi bi-arrow-left-right"></i> Transferencia
+						</button>
+					</div>
+
+					<!-- Historial general de transacciones -->
+					<div class="card p-3 mb-4">
+						<h5 class="mb-3 text-info fw-semibold"><i class="bi bi-clock-history me-2"></i> Historial de Transacciones</h5>
+
+						<div class="table-responsive custom-table-container">
+							<table class="table table-dark table-hover align-middle mb-0 rounded-3 overflow-hidden">
+								<thead class="table-gradient">
+									<tr class="text-info">
+										<th>Fecha</th>
+										<th>Tipo</th>
+										<th>Cuenta origen</th>
+										<th>Cuenta destino</th>
+										<th>Meta de ahorro destino</th>
+										<th>Descripción</th>
+										<th class="text-end">Monto</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for t in transacciones %}
+									<tr>
+										<td>{{ t.fecha|date:"d/m/Y H:i" }}</td>
+										<td>
+											{% if t.tipo == 'INGRESO' %}
+											<span class="badge bg-success bg-opacity-75">Ingreso</span>
+											{% elif t.tipo == 'EGRESO' %}
+											<span class="badge bg-danger bg-opacity-75">Egreso</span>
+											{% else %}
+											<span class="badge bg-primary bg-opacity-75">Transferencia</span>
+											{% endif %}
+										</td>
+										<td>{% if t.cuenta_origen %}{{ t.cuenta_origen.nombre }}{% else %}-{% endif %}</td>
+										<td>{% if t.cuenta_destino %}{{ t.cuenta_destino.nombre }}{% else %}-{% endif %}</td>
+										<td>{% if t.meta_ahorro %}{{ t.meta_ahorro.nombre }}{% else %}-{% endif %}</td>
+										<td>{{ t.descripcion|default:"-" }}</td>
+										<td class="text-end fw-semibold">${{ t.monto|floatformat:0 }}</td>
+									</tr>
+									{% empty %}
+									<tr>
+										<td colspan="6" class="text-center text-muted py-4">No hay transacciones registradas.</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<!-- Solo transferencias (opcional: lista de transferencias) -->
+					{% if transferencias %}
+					<div class="card p-3 mb-4">
+						<h5 class="mb-3 text-info fw-semibold">
+							<i class="bi bi-arrow-left-right me-2"></i> Historial de Transferencias
+						</h5>
+
+						<div class="table-responsive custom-table-container">
+							<table class="table table-dark table-hover align-middle mb-0 rounded-3 overflow-hidden">
+								<thead class="table-gradient">
+									<tr class="text-info">
+										<th>Fecha</th>
+										<th>Cuenta origen</th>
+										<th>Cuenta destino</th>
+										<th>Descripción</th>
+										<th class="text-end">Monto</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for tr in transacciones %}
+									<tr>
+										<td>{{ tr.fecha|date:"d/m/Y H:i" }}</td>
+										<td>{% if tr.cuenta_origen %}{{ tr.cuenta_origen.nombre }}{% else %}-{% endif %}</td>
+										<td>{% if tr.cuenta_destino %}{{ tr.cuenta_destino.nombre }}{% else %}-{% endif %}</td>
+										<td>{{ tr.descripcion|default:"-" }}</td>
+										<td class="text-end fw-semibold">${{ tr.monto|floatformat:0 }}</td>
+									</tr>
+									{% empty %}
+									<tr>
+										<td colspan="5" class="text-center text-muted py-4">No hay transferencias registradas.</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					{% endif %}
+				</div>
 			</div>
-		</div>
 
-		<footer>© 2025 FinControl — Panel de gestión financiera</footer>
+			<footer>© 2025 FinControl — Panel de gestión financiera</footer>
+		</div>
 
 		{% include "transacciones/modal-ingreso.html"%}
 		<br />

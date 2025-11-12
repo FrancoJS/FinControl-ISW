@@ -5,28 +5,21 @@
 			{% csrf_token %}
 			<div class="mb-3">
 				<label class="form-label">Nombre de la meta</label>
-				<input type="text" name="nombre" class="form-control" placeholder="Ej: Ahorro para vacaciones" required>
+				<input type="text" name="nombre" class="form-control" placeholder="Ej: Ahorro para vacaciones" required />
 			</div>
 			<div class="mb-3">
 				<label class="form-label">Monto objetivo</label>
-				<input type="number" name="monto_objetivo" class="form-control" placeholder="Ej: 1000000" min="1" required>
+				<input type="number" name="monto_objetivo" class="form-control" placeholder="Ej: 1000000" min="1" required />
 			</div>
 			<div class="mb-3">
 				<label class="form-label">Monto actual</label>
-				<input type="number" name="monto_actual" class="form-control" value="0" min="0" required>
+				<input type="number" name="monto_actual" class="form-control" value="0" min="0" required />
 			</div>
 			<div class="mb-3">
 				<label class="form-label">Fecha límite</label>
-				<input type="date" name="fecha_limite" class="form-control" required>
+				<input type="date" name="fecha_limite" class="form-control" required />
 			</div>
-			<div class="mb-3">
-				<label class="form-label">Cuenta asociada</label>
-				<select name="cuenta_relacionada" class="form-select" required>
-					{% for cuenta in cuentas %}
-					<option value="{{ cuenta.id }}">{{ cuenta.nombre }}</option>
-					{% endfor %}
-				</select>
-			</div>
+
 			<button type="submit" class="btn btn-main mt-2">Guardar meta</button>
 		</form>
 		<a href="#" class="close-btn" onclick="document.getElementById('overlay').classList.remove('active')">Cancelar</a>
@@ -35,11 +28,11 @@
 
 <script>
 	// Script que abre el overlay cuando se presiona el botón “Nueva meta”
-	document.addEventListener("DOMContentLoaded", function() {
+	document.addEventListener('DOMContentLoaded', function () {
 		const openBtn = document.getElementById('openOverlay');
 		const overlay = document.getElementById('overlay');
 		if (openBtn && overlay) {
-			openBtn.addEventListener('click', function(e) {
+			openBtn.addEventListener('click', function (e) {
 				e.preventDefault();
 				overlay.classList.add('active');
 			});
@@ -48,6 +41,7 @@
 </script>
 
 <style>
+	/* === Estilo base del overlay === */
 	.overlay {
 		display: none;
 		position: fixed;
@@ -61,8 +55,22 @@
 		align-items: center;
 		z-index: 2000;
 	}
-	.overlay.active { display: flex; animation: fadeIn 0.3s ease; }
-	@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+	.overlay.active {
+		display: flex;
+		animation: fadeIn 0.3s ease;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	/* === Contenedor del formulario === */
 	.overlay .form-container {
 		background-color: rgba(10, 25, 47, 0.95);
 		padding: 35px;
@@ -71,18 +79,40 @@
 		border: 1px solid #133b5c;
 		width: 420px;
 	}
+
+	/* === Título === */
 	.overlay h2 {
 		color: #00b4d8;
 		text-align: center;
 		margin-bottom: 25px;
 	}
+
+	/* === Inputs y selects === */
 	.overlay .form-control,
 	.overlay .form-select {
 		background-color: #0a192f;
 		border: 1px solid #133b5c;
 		color: #fff;
 	}
-	.overlay .btn-main { width: 100%; }
+
+	/* 🔹 Placeholder blanco */
+	.overlay .form-control::placeholder {
+		color: #fff;
+		opacity: 0.8; /* ligeramente más tenue */
+	}
+
+	/* 🔹 Icono del input date blanco */
+	.overlay input[type='date']::-webkit-calendar-picker-indicator {
+		filter: invert(1); /* invierte el color para que se vea blanco */
+		cursor: pointer;
+	}
+
+	/* === Botón principal === */
+	.overlay .btn-main {
+		width: 100%;
+	}
+
+	/* === Botón de cerrar === */
 	.overlay .close-btn {
 		color: #8fa3b0;
 		text-decoration: none;
@@ -90,5 +120,7 @@
 		text-align: center;
 		margin-top: 15px;
 	}
-	.overlay .close-btn:hover { color: #ffee58; }
+	.overlay .close-btn:hover {
+		color: #ffee58;
+	}
 </style>

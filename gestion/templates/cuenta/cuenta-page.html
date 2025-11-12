@@ -182,6 +182,20 @@
 				font-size: 0.8rem;
 				padding: 0.45em 0.6em;
 			}
+			html,
+			body {
+				height: 100%;
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+			}
+
+			.main-content {
+				flex: 1; /* ocupa todo el espacio libre */
+				margin-left: 280px;
+				margin-top: 80px;
+				padding: 30px;
+			}
 			footer {
 				text-align: center;
 				padding: 20px;
@@ -255,8 +269,13 @@
 									</td>
 
 									<td class="text-center">
-										<a href="#" class="btn btn-sm btn-outline-info me-2" data-id="{{ cuenta.id }}" data-nombre="{{ cuenta.nombre }}"
-											id="openModificarCuenta">
+										<a
+											href="#"
+											class="btn btn-sm btn-outline-info me-2"
+											data-id="{{ cuenta.id }}"
+											data-nombre="{{ cuenta.nombre }}"
+											id="openModificarCuenta"
+										>
 											<i class="bi bi-pencil-square"></i>
 										</a>
 										<a href="#" class="btn btn-sm btn-outline-danger" id="openEliminarCuenta" data-id="{{ cuenta.id }}">
@@ -278,19 +297,11 @@
 
 		<footer>© 2025 FinControl — Panel de gestión financiera</footer>
 
+		<div id="overlayModificar" class="overlay">{% include "cuenta/modificar_cuenta.html" %}</div>
 
-		<div id="overlayModificar" class="overlay">
-			{% include "cuenta/modificar_cuenta.html" %}
-		</div>
+		<div id="overlayEliminar" class="overlay">{% include "cuenta/eliminar_cuenta.html" %}</div>
 
-		<div id="overlayEliminar" class="overlay">
-			{% include "cuenta/eliminar_cuenta.html" %}
-		</div>
-		
-		<div id="overlayCrear" class="overlay">
-			{% include "cuenta/crear_cuenta.html" %}
-		</div>
-		
+		<div id="overlayCrear" class="overlay">{% include "cuenta/crear_cuenta.html" %}</div>
 
 		<!-- Bootstrap JS (bundle incluye popper) -->
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -342,7 +353,7 @@
 					}
 				});
 
-				[modalCrear, modalModificar].forEach(modal => {
+				[modalCrear, modalModificar].forEach((modal) => {
 					modal.addEventListener('click', (e) => {
 						if (e.target === modal) modal.classList.remove('active');
 					});
@@ -356,29 +367,28 @@
 			const inputId = modalModificar.querySelector('input[name="id"]');
 			const inputNombre = modalModificar.querySelector('input[name="nombre"]');
 
-			openButtons.forEach(btn => {
-					btn.addEventListener('click', e => {
-						e.preventDefault();
-						modalModificar.classList.add('active');
-						inputId.value = btn.dataset.id;
-						inputNombre.value = btn.dataset.nombre;
-					});
+			openButtons.forEach((btn) => {
+				btn.addEventListener('click', (e) => {
+					e.preventDefault();
+					modalModificar.classList.add('active');
+					inputId.value = btn.dataset.id;
+					inputNombre.value = btn.dataset.nombre;
 				});
+			});
 		</script>
 
 		<script>
 			const overlayEliminar = document.getElementById('overlayEliminar');
-				const openDeleteBtns = document.querySelectorAll('#openEliminarCuenta');
-				const inputDeleteId = document.getElementById('deleteCuentaId');
+			const openDeleteBtns = document.querySelectorAll('#openEliminarCuenta');
+			const inputDeleteId = document.getElementById('deleteCuentaId');
 
-				openDeleteBtns.forEach(btn => {
-					btn.addEventListener('click', e => {
-						e.preventDefault();
-						overlayEliminar.classList.add('active');
-						inputDeleteId.value = btn.dataset.id;
-					});
+			openDeleteBtns.forEach((btn) => {
+				btn.addEventListener('click', (e) => {
+					e.preventDefault();
+					overlayEliminar.classList.add('active');
+					inputDeleteId.value = btn.dataset.id;
 				});
+			});
 		</script>
-
 	</body>
 </html>

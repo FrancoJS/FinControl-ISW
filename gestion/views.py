@@ -96,7 +96,7 @@ def crear_cuenta(request):
     else:
         resultado["cuentas"] = cuentas.obtener_cuentas(usuario_id=usuario_id)
         return render(request, 'cuenta/cuenta-page.html', resultado)
-    
+
 def modificar_cuenta(request):
     resultado = {}
     usuario_id = request.session.get('usuario_id')
@@ -133,7 +133,7 @@ def landing_page(request):
 def eliminar_cuenta(request):
     resultado = {}
     usuario_id = request.session.get('usuario_id')
-    
+
     if request.method == 'POST':
         id_cuenta = request.POST.get('id')
 
@@ -147,19 +147,20 @@ def eliminar_cuenta(request):
 
         resultado["cuentas"] = cuentas.obtener_cuentas(usuario_id)
         return render(request, 'cuenta/cuenta-page.html', resultado)
-    
+
     resultado["cuentas"] = cuentas.obtener_cuentas(usuario_id)
     return render(request, 'cuenta/cuenta-page.html', resultado)
-        
+
 
 def transacciones_page(request):
 
     usuario_id = request.session.get('usuario_id')
     lista_cuentas = cuentas.obtener_cuentas(usuario_id)
-    print(lista_cuentas)
+    lista_metas = metas.obtener_metas(usuario_id)
     resultado = {
         "cuentas": lista_cuentas,
-        "transacciones": transacciones.obtener_transacciones(usuario_id)
+        "transacciones": transacciones.obtener_transacciones(usuario_id),
+        "metas": lista_metas
     }
     return render(request, 'transacciones/transacciones-page.html', resultado)
 
@@ -167,9 +168,8 @@ def crear_transaccion(request):
     usuario_id = request.session.get('usuario_id')
     if request.method == 'POST' and request.session.get('estado_sesion') == True:
         cuenta_origen = request.POST.get('cuenta_origen')
-        cuenta_destino = request.POST.get('cuenta_destino')
-        print(cuenta_destino)
-        print(cuenta_origen)
+        cuenta_destino = request.POST.get('cuenta_destino') or None
+        meta_ahorro = request.POST.get('meta_ahorro') or None
         monto = request.POST.get('monto')
         descripcion = request.POST.get('descripcion')
         tipo = request.POST.get('tipo')
@@ -180,20 +180,21 @@ def crear_transaccion(request):
             'monto': monto,
             'descripcion': descripcion,
             'tipo': tipo,
-            'usuario': usuario_id
+            'usuario': usuario_id,
+            'meta_ahorro': meta_ahorro
         }
 
         resultado = transacciones.crear_transaccion(transaccion)
+        lista_metas = metas.obtener_metas(usuario_id)
         lista_cuentas = cuentas.obtener_cuentas(usuario_id)
         lista_transacciones = transacciones.obtener_transacciones(usuario_id)
 
         resultado["transacciones"] = lista_transacciones
         resultado["cuentas"] = lista_cuentas
+        resultado["metas"] = lista_metas
 
 
         return render(request, 'transacciones/transacciones-page.html', resultado)
-
-
 
 
 
@@ -225,13 +226,13 @@ def crear_meta(request):
             resultado["success"] = True
             resultado["mensaje"] = respuesta["mensaje"]
 
-        usuario_id = request.session.get('id_usuario')
+        usuario_id = request.session.get('usuario_id')
         resultado["metas"] = metas.obtener_metas(usuario_id)
         resultado["cuentas"] = cuentas.obtener_cuentas(usuario_id)
 
         return render(request, 'metas/metas-page.html', resultado)
     else:
-        usuario_id = request.session.get('id_usuario')
+        usuario_id = request.session.get('usuario_id')
         resultado["metas"] = metas.obtener_metas(usuario_id)
         resultado["cuentas"] = cuentas.obtener_cuentas(usuario_id)
         return render(request, 'metas/metas-page.html', resultado)
@@ -244,20 +245,19 @@ def editar_meta(request):
         monto_objetivo = float(request.POST.get("monto_objetivo", 0))
         monto_actual = float(request.POST.get("monto_actual", 0))
         fecha_limite = request.POST.get("fecha_limite")
-        cuenta_relacionada_id = request.POST.get("cuenta_relacionada")
         usuario_id = request.session.get('usuario_id')
 
         if not meta_id:
             resultado = {"success": False, "mensaje": "ID de meta no especificado."}
             return render(request, 'metas/metas-page.html', resultado)
 
-        meta = MetaAhorro.objects.get(id=meta_id, cuenta_relacionada__usuario_id=usuario_id)
+        meta = MetaAhorro.objects.get(id=meta_id)
 
         meta.nombre = nombre
         meta.monto_objetivo = monto_objetivo
         meta.monto_actual = monto_actual
         meta.fecha_limite = fecha_limite
-        meta.cuenta_relacionada = Cuenta.objects.get(id=cuenta_relacionada_id)
+
         meta.save()
         lista_metas = metas.obtener_metas(usuario_id)
 
@@ -270,7 +270,7 @@ def editar_meta(request):
         print("Error al editar meta:", e)
         resultado = {"success": False, "mensaje": "Ocurrió un error al editar la meta."}
         return render(request, 'metas/metas-page.html', resultado)
-    
+
 def eliminar_meta(request, meta_id):
     respuesta = metas.eliminar_meta(meta_id)
     usuario_id = request.session.get('id_usuario')

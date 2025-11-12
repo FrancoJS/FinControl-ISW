@@ -273,7 +273,7 @@ def editar_meta(request):
 
 def eliminar_meta(request, meta_id):
     respuesta = metas.eliminar_meta(meta_id)
-    usuario_id = request.session.get('id_usuario')
+    usuario_id = request.session.get('usuario_id')
     lista_metas = metas.obtener_metas(usuario_id)
     lista_cuentas = cuentas.obtener_cuentas(usuario_id)
 

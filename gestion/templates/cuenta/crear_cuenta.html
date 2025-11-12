@@ -30,7 +30,6 @@
 	}
 </style>
 
-<div id="overlay" class="overlay" aria-hidden="true">
 	<div class="form-container" role="dialog" aria-labelledby="crearCuentaTitle">
 		<h2 id="crearCuentaTitle"><i class="bi bi-wallet2"></i> Crear Nueva Cuenta</h2>
 
@@ -43,7 +42,6 @@
 				<input type="text" name="nombre" class="form-control" placeholder="Ejemplo: Cuenta de Ahorros" required />
 			</div>
 
-			<!-- Saldo inicial -->
 			<div class="mb-3">
 				<label class="form-label"><i class="bi bi-bank"></i> Tipo de cuenta</label>
 				<select name="tipo" class="form-select" required>
@@ -58,6 +56,7 @@
 				</select>
 			</div>
 
+			<!-- Saldo inicial -->
 			<div class="mb-3">
 				<label class="form-label"><i class="bi bi-cash-stack"></i> Saldo inicial</label>
 				<input type="number" name="saldo" class="form-control" placeholder="Ejemplo: 50000" min="0" required />
@@ -68,11 +67,10 @@
 		</form>
 
 		<!-- Botón cancelar -->
-		<a href="#" id="closeOverlay" class="close-btn" role="button" aria-label="Cancelar">
+		<a href="#" id="closeCrearOverlay" class="close-btn" role="button" aria-label="Cancelar">
 			<i class="bi bi-x-circle"></i> Cancelar
 		</a>
 	</div>
-</div>
 
 <script>
 	(function () {

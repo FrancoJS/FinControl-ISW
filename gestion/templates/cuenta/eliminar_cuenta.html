@@ -1,0 +1,80 @@
+<!-- eliminar_cuenta.html -->
+<div class="form-container" role="dialog" aria-labelledby="eliminarCuentaTitle">
+    <h2 id="eliminarCuentaTitle" class="text-danger">
+        <i class="bi bi-exclamation-triangle-fill"></i> Confirmar eliminación
+    </h2>
+
+    <p class="mt-3 mb-4 text-light text-center">
+        ¿Está seguro(a) de <strong>eliminar esta cuenta</strong>?<br>
+        Esta acción no se puede deshacer.
+    </p>
+
+    <form method="POST" action="/eliminar-cuenta/">
+        {% csrf_token %}
+        <input type="hidden" name="id" id="deleteCuentaId" value="">
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <button type="submit" class="btn btn-danger px-4">
+                <i class="bi bi-trash"></i> Confirmar
+            </button>
+            <a href="#" id="closeEliminar" class="btn btn-secondary px-4">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+(function () {
+    const overlayEliminar = document.getElementById('overlayEliminar');
+    const closeEliminar = document.getElementById('closeEliminar');
+
+    if (closeEliminar) {
+        closeEliminar.addEventListener('click', function (e) {
+            e.preventDefault();
+            overlayEliminar.classList.remove('active');
+        });
+    }
+
+    // Cerrar con Escape
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlayEliminar.classList.contains('active')) {
+            overlayEliminar.classList.remove('active');
+        }
+    });
+
+    // Cerrar al hacer clic fuera del modal
+    overlayEliminar.addEventListener('click', function (e) {
+        if (e.target === overlayEliminar) {
+            overlayEliminar.classList.remove('active');
+        }
+    });
+})();
+</script>
+
+<style>
+    /* Reutiliza estilos de los otros modales */
+    .form-container {
+        background-color: #0f223a;
+        border: 1px solid #133b5c;
+        border-radius: 12px;
+        padding: 35px;
+        width: 400px;
+        margin: 0 auto;
+        color: #f8f9fa;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+        text-align: center;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+</style>

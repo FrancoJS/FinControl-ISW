@@ -126,6 +126,28 @@ def landing_page(request):
     return render(request, 'landing-page/landing.html')
 
 
+def eliminar_cuenta(request):
+    resultado = {}
+    usuario_id = request.session.get('usuario_id')
+    
+    if request.method == 'POST':
+        id_cuenta = request.POST.get('id')
+
+        if not id_cuenta:
+            resultado['success'] = False
+            resultado['mensaje'] = 'No se ha recibido el ID de la cuenta'
+        else:
+            respuesta = cuentas.eliminar_cuenta(id_cuenta, usuario_id)
+            resultado["success"] = respuesta["success"]
+            resultado["mensaje"] = respuesta["mensaje"]
+
+        resultado["cuentas"] = cuentas.obtener_cuentas(usuario_id)
+        return render(request, 'cuenta/cuenta-page.html', resultado)
+    
+    resultado["cuentas"] = cuentas.obtener_cuentas(usuario_id)
+    return render(request, 'cuenta/cuenta-page.html', resultado)
+        
+
 def transacciones_page(request):
     usuario_id = request.session.get('usuario_id')
     lista_cuentas = cuentas.obtener_cuentas(usuario_id)

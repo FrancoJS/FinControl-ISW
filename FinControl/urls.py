@@ -13,4 +13,5 @@ urlpatterns = [
     path('crear-transaccion/', views.crear_transaccion ),
     path('cerrar-sesion/', views.cerrar_sesion ),
     path('modificar-cuenta/', views.modificar_cuenta ),
+    path('eliminar-cuenta/', views.eliminar_cuenta ),
 ]

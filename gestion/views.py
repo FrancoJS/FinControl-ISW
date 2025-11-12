@@ -252,19 +252,25 @@ def editar_meta(request):
             return render(request, 'metas/metas-page.html', resultado)
 
         meta = MetaAhorro.objects.get(id=meta_id)
-
         meta.nombre = nombre
         meta.monto_objetivo = monto_objetivo
         meta.monto_actual = monto_actual
         meta.fecha_limite = fecha_limite
-
         meta.save()
-        lista_metas = metas.obtener_metas(usuario_id)
 
-        resultado = {"success": True, "mensaje": "Meta actualizada correctamente.", "metas": lista_metas}
+        lista_metas = metas.obtener_metas(usuario_id)
+        lista_cuentas = cuentas.obtener_cuentas(usuario_id)  # ← Agregar esta línea
+
+        resultado = {
+            "success": True,
+            "mensaje": "Meta actualizada correctamente.",
+            "metas": lista_metas,
+            "cuentas": lista_cuentas,  # ← Agregar esta línea
+        }
         return render(request, 'metas/metas-page.html', resultado)
+
     except MetaAhorro.DoesNotExist:
-        resultado = {"success": False, "mensaje": "La meta no existe o no pertenece al usuario.",}
+        resultado = {"success": False, "mensaje": "La meta no existe o no pertenece al usuario."}
         return render(request, 'metas/metas-page.html', resultado)
     except Exception as e:
         print("Error al editar meta:", e)
@@ -273,7 +279,6 @@ def editar_meta(request):
 
 def eliminar_meta(request):
     meta_id = request.POST.get("id")
-    print(meta_id)
     respuesta = metas.eliminar_meta(meta_id)
     usuario_id = request.session.get('usuario_id')
     lista_metas = metas.obtener_metas(usuario_id)

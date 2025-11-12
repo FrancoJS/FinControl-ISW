@@ -31,43 +31,24 @@
 </style>
 
 	<div class="form-container" role="dialog" aria-labelledby="crearCuentaTitle">
-		<h2 id="crearCuentaTitle"><i class="bi bi-wallet2"></i> Crear Nueva Cuenta</h2>
+		<h2 id="crearCuentaTitle"><i class="bi bi-pencil-square"></i> Editar Cuenta</h2>
 
-		<form method="POST" action="/crear-cuenta/">
+		<form method="POST" action="/modificar-cuenta/">
 			{% csrf_token %}
+            <input type="hidden" name="id" value="{{ cuenta.id }}">
 
 			<!-- Nombre de la cuenta -->
 			<div class="mb-3">
 				<label class="form-label"><i class="bi bi-bank"></i> Nombre de la cuenta</label>
-				<input type="text" name="nombre" class="form-control" placeholder="Ejemplo: Cuenta de Ahorros" required />
-			</div>
-
-			<!-- Saldo inicial -->
-			<div class="mb-3">
-				<label class="form-label"><i class="bi bi-bank"></i> Tipo de cuenta</label>
-				<select name="tipo" class="form-select" required>
-					<option value="">Selecciona un tipo de cuenta</option>
-					<option value="CC">Cuenta Corriente</option>
-					<option value="CA">Cuenta de Ahorro</option>
-					<option value="CV">Cuenta Vista</option>
-					<option value="CI">Cuenta de Inversión</option>
-					<option value="CE">Cuenta Corriente Empresarial</option>
-					<option value="CD">Cuenta Digital</option>
-					<option value="OTRO">Otro</option>
-				</select>
-			</div>
-
-			<div class="mb-3">
-				<label class="form-label"><i class="bi bi-cash-stack"></i> Saldo inicial</label>
-				<input type="number" name="saldo" class="form-control" placeholder="Ejemplo: 50000" min="0" required />
+				<input type="text" name="nombre" class="form-control" placeholder="Ejemplo: Cuenta Corriente" required />
 			</div>
 
 			<!-- Botón registrar -->
-			<button type="submit" class="btn btn-main"><i class="bi bi-plus-circle"></i> Registrar cuenta</button>
+			<button type="submit" class="btn btn-main"><i class="bi bi-plus-circle"></i> Modificar Cuenta</button>
 		</form>
 
 		<!-- Botón cancelar -->
-		<a href="#" id="closeCrearOverlay" class="close-btn" role="button" aria-label="Cancelar">
+		<a href="#" id="closeModificarOverlay" class="close-btn" role="button" aria-label="Cancelar">
 			<i class="bi bi-x-circle"></i> Cancelar
 		</a>
 	</div>

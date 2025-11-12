@@ -3,7 +3,7 @@ from gestion.models import Transaccion
 
 def crear_transaccion(transaccion):
     try:
-        transaccion = Transaccion(tipo=transaccion['tipo'], monto=transaccion['monto'], cuenta_origen_id=transaccion['cuenta_origen'], cuenta_destino_id=transaccion['cuenta_destino'], descripcion=transaccion['descripcion'], usuario_id=transaccion['usuario'] )
+        transaccion = Transaccion(tipo=transaccion['tipo'], monto=transaccion['monto'], cuenta_origen_id=transaccion['cuenta_origen'], cuenta_destino_id=transaccion['cuenta_destino'], descripcion=transaccion['descripcion'], usuario_id=transaccion['usuario'], meta_ahorro_id=transaccion['meta_ahorro'])
         transaccion.save()
         return {
             'success': True,

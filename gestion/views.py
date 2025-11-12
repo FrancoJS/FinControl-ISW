@@ -43,7 +43,7 @@ def iniciar_sesion(request):
             listar_cuentas = cuentas.obtener_cuentas(usuario.id)
             datos = {
                 'email': email,
-                'cuentas': listar_cuentas
+                'cuentas': listar_cuentas,
             }
             return render(request, 'cuenta/cuenta-page.html', datos)
         else:
@@ -76,7 +76,8 @@ def crear_cuenta(request):
     if request.method == 'POST':
         nombre = request.POST['nombre']
         saldo = request.POST['saldo']
-        respuesta = cuentas.crear_cuenta(nombre, saldo, usuario_id)
+        tipo = request.POST['tipo']
+        respuesta = cuentas.crear_cuenta(nombre, saldo, usuario_id, tipo)
 
         if respuesta["success"] == False:
             resultado["success"] = False
@@ -103,6 +104,7 @@ def transacciones_page(request):
     return render(request, 'transacciones/transacciones-page.html', resultado)
 
 def crear_transaccion(request):
+    usuario_id = request.session.get('usuario_id')
     if request.method == 'POST' and request.session.get('estado_sesion') == True:
         cuenta_origen = request.POST.get('cuenta_origen')
         cuenta_destino = request.POST.get('cuenta_destino')
@@ -117,11 +119,11 @@ def crear_transaccion(request):
             'cuenta_destino': cuenta_destino,
             'monto': monto,
             'descripcion': descripcion,
-            'tipo': tipo
+            'tipo': tipo,
+            'usuario': usuario_id
         }
 
         nueva_transaccion = transacciones.crear_transaccion(transaccion)
-        usuario_id = request.session.get('usuario_id')
         lista_cuentas = cuentas.obtener_cuentas(usuario_id)
         lista_transacciones = transacciones.obtener_transacciones(usuario_id)
         print(lista_transacciones)

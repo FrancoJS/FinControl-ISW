@@ -204,6 +204,7 @@
 							<tr class="text-info">
 								<th>Nombre</th>
 								<th>Saldo</th>
+								<th class="">Tipo</th>
 								<th class="text-center">Acciones</th>
 							</tr>
 						</thead>
@@ -212,6 +213,24 @@
 							<tr>
 								<td>{{ cuenta.nombre }}</td>
 								<td>${{ cuenta.saldo }}</td>
+								<td>
+									{% if cuenta.tipo == 'CC' %}
+									<span class="badge bg-success">Cuenta Corriente</span>
+									{% elif t.tipo == 'CA' %}
+									<span class="badge bg-danger">Cuenta Ahorro</span>
+									{% elif t.tipo == 'CV' %}
+									<span class="badge bg-danger">Cuenta Vista</span>
+									{% elif t.tipo == 'CI' %}
+									<span class="badge bg-danger">Cuenta Inversion</span>
+									{% elif t.tipo == 'CE' %}
+									<span class="badge bg-danger">Cuenta Corriente Empresarial</span>
+									{% elif t.tipo == 'CD' %}
+									<span class="badge bg-danger">Cuenta Digital</span>
+									{% else %}
+									<span class="badge bg-primary">Otro</span>
+									{% endif %}
+								</td>
+
 								<td class="text-center">
 									<a href="" class="btn btn-sm btn-outline-info me-2"><i class="bi bi-pencil-square"></i></a>
 									<a href="}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>

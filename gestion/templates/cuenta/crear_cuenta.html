@@ -45,6 +45,20 @@
 
 			<!-- Saldo inicial -->
 			<div class="mb-3">
+				<label class="form-label"><i class="bi bi-bank"></i> Tipo de cuenta</label>
+				<select name="tipo" class="form-select" required>
+					<option value="">Selecciona un tipo de cuenta</option>
+					<option value="CC">Cuenta Corriente</option>
+					<option value="CA">Cuenta de Ahorro</option>
+					<option value="CV">Cuenta Vista</option>
+					<option value="CI">Cuenta de Inversión</option>
+					<option value="CE">Cuenta Corriente Empresarial</option>
+					<option value="CD">Cuenta Digital</option>
+					<option value="OTRO">Otro</option>
+				</select>
+			</div>
+
+			<div class="mb-3">
 				<label class="form-label"><i class="bi bi-cash-stack"></i> Saldo inicial</label>
 				<input type="number" name="saldo" class="form-control" placeholder="Ejemplo: 50000" min="0" required />
 			</div>

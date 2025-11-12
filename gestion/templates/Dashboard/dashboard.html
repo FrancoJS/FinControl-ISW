@@ -209,7 +209,7 @@
 		<i id="toggleSidebar" class="bi bi-list" style="cursor: pointer"></i>
 		<span>Panel de control</span>
 	</div>
-	<div class="user"><i class="bi bi-person"></i> {{ user.username }}</div>
+	<div class="user"><i class="bi bi-person mr-4"> </i>Bienvenido {{ request.session.nombre_usuario }}</div>
 </div>
 <script>
 	document.addEventListener('DOMContentLoaded', function () {

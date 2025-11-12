@@ -1,8 +1,8 @@
 from gestion.models import Cuenta
 
-def crear_cuenta(nombre, saldo, usuario_id):
+def crear_cuenta(nombre, saldo, usuario_id, tipo):
     try:
-        cuenta = Cuenta(nombre=nombre, saldo=saldo, usuario_id=usuario_id)
+        cuenta = Cuenta(nombre=nombre, saldo=saldo, usuario_id=usuario_id, tipo=tipo)
         cuenta.save()
         return {
             "success": True,

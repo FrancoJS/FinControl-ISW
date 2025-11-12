@@ -371,7 +371,7 @@
 										<span class="badge bg-primary">Transferencia</span>
 										{% endif %}
 									</td>
-									<td>{{ t.cuenta_origen.nombre }}</td>
+									<td>{% if t.cuenta_origen %}{{ t.cuenta_origen.nombre }}{% else %}-{% endif %}</td>
 									<td>{% if t.cuenta_destino %}{{ t.cuenta_destino.nombre }}{% else %}-{% endif %}</td>
 									<td>{{ t.descripcion|default:"-" }}</td>
 									<td class="text-end">${{ t.monto|floatformat:0 }}</td>

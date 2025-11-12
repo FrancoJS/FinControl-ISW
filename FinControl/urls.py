@@ -8,5 +8,6 @@ urlpatterns = [
     path('iniciar_sesion/',views.iniciar_sesion),
     path('registro/',views.registro),
     path('cuenta/', views.cuenta_page ),
-    path('crear-cuenta/', views.crear_cuenta )
+    path('crear-cuenta/', views.crear_cuenta ),
+    path('modificar-cuenta/', views.modificar_cuenta ),
 ]

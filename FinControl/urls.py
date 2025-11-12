@@ -19,7 +19,7 @@ urlpatterns = [
     path('metas/', views.metas_page),
     path('crear_meta/', views.crear_meta),
     path('editar_meta/', views.editar_meta),
-    path('eliminar_meta/<int:meta_id>/', views.eliminar_meta),
+    path('eliminar_meta/', views.eliminar_meta),
 
 
 

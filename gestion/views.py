@@ -271,7 +271,9 @@ def editar_meta(request):
         resultado = {"success": False, "mensaje": "Ocurrió un error al editar la meta."}
         return render(request, 'metas/metas-page.html', resultado)
 
-def eliminar_meta(request, meta_id):
+def eliminar_meta(request):
+    meta_id = request.POST.get("id")
+    print(meta_id)
     respuesta = metas.eliminar_meta(meta_id)
     usuario_id = request.session.get('usuario_id')
     lista_metas = metas.obtener_metas(usuario_id)

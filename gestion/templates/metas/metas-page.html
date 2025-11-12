@@ -222,8 +222,7 @@
                                 </button>
 
                                 <!-- Botón eliminar -->
-                                <a href="/eliminar_meta/{{ meta.id }}/" class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('¿Estás seguro de eliminar esta meta?');">
+                                <a href="#" class="btn btn-sm btn-outline-danger" id="openEliminarMeta" data-id="{{ meta.id }}">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </td>
@@ -244,6 +243,8 @@
     </div>
 
     <footer>© 2025 FinControl — Panel de gestión financiera</footer>
+
+    <div id="overlayEliminarMeta" class="overlay">{% include "metas/eliminar_meta.html" %}</div>
 
     {% include "metas/crear_meta.html" %}
 
@@ -346,6 +347,19 @@
       });
     </script>
 
+    <script>
+        const overlayEliminar = document.getElementById('overlayEliminarMeta');
+        const openDeleteBtns = document.querySelectorAll('#openEliminarMeta');
+        const inputDeleteId = document.getElementById('deleteMetaId');
+
+        openDeleteBtns.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                overlayEliminar.classList.add('active');
+                inputDeleteId.value = btn.dataset.id;
+            });
+        });
+    </script>
 
 </body>
 

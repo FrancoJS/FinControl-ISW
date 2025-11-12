@@ -10,5 +10,10 @@ urlpatterns = [
     path('cuenta/', views.cuenta_page ),
     path('crear-cuenta/', views.crear_cuenta ),
     path('metas/', views.metas_page),
-    path('metas/crear/', views.crear_meta),
+    path('crear_meta/', views.crear_meta),
+    path('editar_meta/', views.editar_meta),
+    path('eliminar_meta/<int:meta_id>/', views.eliminar_meta),
+
+
+
 ]

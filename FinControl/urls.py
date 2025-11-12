@@ -10,4 +10,5 @@ urlpatterns = [
     path('cuenta/', views.cuenta_page ),
     path('crear-cuenta/', views.crear_cuenta ),
     path('modificar-cuenta/', views.modificar_cuenta ),
+    path('eliminar-cuenta/', views.eliminar_cuenta ),
 ]

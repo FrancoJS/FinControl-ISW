@@ -159,7 +159,9 @@
 										id="openModificarCuenta">
 										<i class="bi bi-pencil-square"></i>
 									</a>
-									<a href="#" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+									<a href="#" class="btn btn-sm btn-outline-danger" id="openEliminarCuenta" data-id="{{ cuenta.id }}">
+										<i class="bi bi-trash"></i>
+									</a>
 								</td>
 							</tr>
 							{% empty %}
@@ -177,6 +179,10 @@
 
 		<div id="overlayModificar" class="overlay">
 			{% include "cuenta/modificar_cuenta.html" %}
+		</div>
+
+		<div id="overlayEliminar" class="overlay">
+			{% include "cuenta/eliminar_cuenta.html" %}
 		</div>
 		
 		<div id="overlayCrear" class="overlay">
@@ -254,6 +260,20 @@
 						modalModificar.classList.add('active');
 						inputId.value = btn.dataset.id;
 						inputNombre.value = btn.dataset.nombre;
+					});
+				});
+		</script>
+
+		<script>
+			const overlayEliminar = document.getElementById('overlayEliminar');
+				const openDeleteBtns = document.querySelectorAll('#openEliminarCuenta');
+				const inputDeleteId = document.getElementById('deleteCuentaId');
+
+				openDeleteBtns.forEach(btn => {
+					btn.addEventListener('click', e => {
+						e.preventDefault();
+						overlayEliminar.classList.add('active');
+						inputDeleteId.value = btn.dataset.id;
 					});
 				});
 		</script>

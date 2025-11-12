@@ -31,6 +31,7 @@ def registro(request):
             }
             return render(request, 'cuenta/cuenta-page.html', datos)
 
+
     return render(request, 'Usuarios/registro.html')
 
 def iniciar_sesion(request):

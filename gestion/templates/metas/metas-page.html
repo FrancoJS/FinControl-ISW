@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | FinControl</title>
+
+    <!-- Bootstrap + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- 👈 agregado -->
+
+    <style>
+        body {
+            background-color: #0a0f1a;
+            color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            background-color: #0f223a;
+            border-right: 1px solid #133b5c;
+            padding-top: 70px;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.4);
+            z-index: 999;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 25px;
+            color: #d8e9f0;
+            text-decoration: none;
+            transition: all 0.25s ease-in-out;
+            white-space: nowrap;
+            font-size: 1.05rem;
+        }
+
+        .sidebar a.active,
+        .sidebar a:hover {
+            background-color: #133b5c;
+            color: #ffee58;
+        }
+
+        .sidebar h4 {
+            color: #00b4d8;
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .topbar {
+            position: fixed;
+            left: 280px;
+            right: 0;
+            top: 0;
+            height: 70px;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #133b5c;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            z-index: 1000;
+        }
+
+        .topbar .brand {
+            color: #00b4d8;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar .user {
+            color: #ffee58;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            margin-top: 80px;
+            padding: 30px;
+        }
+
+        .card {
+            background-color: #0f223a;
+            border: 1px solid #133b5c;
+            border-radius: 10px;
+            color: #e0f7fa;
+        }
+
+        .btn-main {
+            background-color: #00b4d8;
+            color: #fff;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-main:hover {
+            background-color: #0077b6;
+            transform: scale(1.03);
+        }
+
+        .section-title {
+            color: #00e1ff;
+            font-weight: 600;
+            margin-top: 40px;
+            border-bottom: 1px solid #133b5c;
+            padding-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #8fa3b0;
+            background-color: #061320;
+            border-top: 1px solid #133b5c;
+            margin-left: 280px;
+        }
+    </style>
+</head>
+
+<body class="sidebar-open">
+    {% include "dashboard/dashboard.html" %}
+
+    <div class="main-content">
+        <div class="container-fluid">
+
+            <!-- ALERTAS -->
+            {% if mensaje and success == True %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ mensaje }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% elif mensaje and success == False %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ mensaje }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
+            <!-- TITULO -->
+            <h3 id="metas" class="section-title"><i class="bi bi-bullseye"></i> Metas de ahorro</h3>
+
+            <!-- GRAFICO -->
+            <div class="card p-4 mb-4">
+                <h5 class="text-info mb-3"><i class="bi bi-graph-up"></i> Avance general de metas</h5>
+                <canvas id="graficoMetas" height="120"></canvas>
+            </div>
+
+            <!-- BOTON NUEVA META -->
+            <div class="d-flex justify-content-end mb-3">
+                <button id="openOverlay" class="btn btn-main"><i class="bi bi-plus-circle"></i> Nueva meta</button>
+            </div>
+
+            <!-- TABLA -->
+            <div class="table-responsive">
+                <table class="table table-dark table-hover align-middle">
+                    <thead>
+                        <tr class="text-info">
+                            <th>Nombre</th>
+                            <th>Monto objetivo</th>
+                            <th>Monto actual</th>
+                            <th>Progreso</th>
+                            <th>Fecha límite</th>
+                            <th>Cuenta asociada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for meta in metas %}
+                        <tr>
+                            <td>{{ meta.nombre }}</td>
+                            <td>${{ meta.monto_objetivo }}</td>
+                            <td>${{ meta.monto_actual }}</td>
+                            <td style="width: 250px;">
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar bg-info" role="progressbar"
+                                        style="width: {{ meta.porcentaje }}%;" aria-valuenow="{{ meta.porcentaje }}"
+                                        aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <small>{{ meta.porcentaje }}%</small>
+                            </td>
+                            <td>{{ meta.fecha_limite }}</td>
+                            <td>{{ meta.cuenta_relacionada.nombre }}</td>
+                            <td class="text-center">
+                                <!-- Botón editar -->
+                                <button class="btn btn-sm btn-outline-warning me-2"
+                                    onclick="abrirEditarMeta('{{ meta.id }}', '{{ meta.nombre|escapejs }}', '{{ meta.monto_objetivo }}', '{{ meta.monto_actual }}', '{{ meta.fecha_limite|date:"Y-m-d" }}', '{{ meta.cuenta_relacionada.id }}')"
+                                    Y-m-d" }}' , '{{ meta.cuenta_relacionada.id }}' )">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+
+                                <!-- Botón eliminar -->
+                                <a href="/eliminar_meta/{{ meta.id }}/" class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('¿Estás seguro de eliminar esta meta?');">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+
+
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">No hay metas registradas.</td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>© 2025 FinControl — Panel de gestión financiera</footer>
+
+    {% include "metas/crear_meta.html" %}
+
+    <!-- 👇 Pega aquí el nuevo modal de edición -->
+    <!-- Modal Editar Meta -->
+    <div class="modal fade" id="modalEditarMeta" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color:#0f223a; color:#fff;">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title text-warning"><i class="bi bi-pencil-square"></i> Editar meta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="/editar_meta/">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <input type="hidden" name="meta_id" id="editMetaId">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la meta</label>
+                            <input type="text" name="nombre" id="editNombre" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Monto objetivo</label>
+                            <input type="number" name="monto_objetivo" id="editObjetivo" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Monto actual</label>
+                            <input type="number" name="monto_actual" id="editActual" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Fecha límite</label>
+                            <input type="date" name="fecha_limite" id="editFecha" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Cuenta asociada</label>
+                            <select name="cuenta_relacionada" id="editCuenta" class="form-select" required>
+                                {% for cuenta in cuentas %}
+                                <option value="{{ cuenta.id }}">{{ cuenta.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-secondary">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-main">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Script del gráfico -->
+    <!-- Bootstrap y Chart.js deben cargarse antes del script personalizado -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- 👇 tu script personalizado debe ir después -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // ----- Chart.js -----
+            const canvas = document.getElementById('graficoMetas');
+            if (canvas) {
+                const nombres = [{% for meta in metas %} '{{ meta.nombre|escapejs }}'{% if not forloop.last %}, {% endif %} {% endfor %}];
+            const porcentajes = [{% for meta in metas %}{{ meta.porcentaje|floatformat:2 }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+
+
+
+
+
+
+        if (nombres.length && porcentajes.length && window.Chart) {
+            new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: nombres,
+                    datasets: [{
+                        label: 'Porcentaje de avance',
+                        data: porcentajes,
+                        backgroundColor: '#00b4d8',
+                        borderColor: '#00e1ff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: true, max: 100, ticks: { color: '#f8f9fa' } },
+                        x: { ticks: { color: '#f8f9fa' } }
+                    },
+                    plugins: { legend: { labels: { color: '#f8f9fa' } } }
+                }
+            });
+        }
+        }
+
+        // ----- Modal edición programático -----
+        const modalEl = document.getElementById('modalEditarMeta');
+        let modalEditar = null;
+        if (modalEl && window.bootstrap) {
+            modalEditar = new bootstrap.Modal(modalEl);
+        }
+
+        // función global para el onclick del botón
+        window.abrirEditarMeta = function (id, nombre, objetivo, actual, fechaISO, cuentaId) {
+            document.getElementById('editMetaId').value = id;
+            document.getElementById('editNombre').value = nombre;
+            document.getElementById('editObjetivo').value = objetivo;
+            document.getElementById('editActual').value = actual;
+            document.getElementById('editFecha').value = fechaISO.trim(); // formato yyyy-mm-dd
+            document.getElementById('editCuenta').value = cuentaId;
+            if (modalEditar) modalEditar.show();
+        };
+      });
+    </script>
+
+
+</body>
+
+</html>

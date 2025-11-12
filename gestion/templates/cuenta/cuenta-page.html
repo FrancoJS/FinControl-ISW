@@ -163,6 +163,27 @@
 			.overlay .close-btn:hover {
 				color: #ffee58;
 			}
+			.custom-table-container {
+				background: rgba(255, 255, 255, 0.05);
+				backdrop-filter: blur(8px);
+				border-radius: 12px;
+				padding: 0.5rem;
+				box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+			}
+
+			.table-gradient thead {
+				background: linear-gradient(90deg, #0d6efd22, #0dcaf022);
+			}
+
+			.table-dark tbody tr:hover {
+				background-color: rgba(13, 202, 240, 0.15) !important;
+				transition: all 0.3s ease;
+			}
+
+			.badge {
+				font-size: 0.8rem;
+				padding: 0.45em 0.6em;
+			}
 			footer {
 				text-align: center;
 				padding: 20px;
@@ -171,6 +192,7 @@
 				border-top: 1px solid #133b5c;
 				margin-left: 280px;
 			}
+
 			/* overlay styles necesarios (la estructura del overlay está en el include) */
 		</style>
 	</head>
@@ -193,56 +215,64 @@
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 				</div>
 				{%endif%}
-				<h3 id="cuentas" class="section-title"><i class="bi bi-wallet2"></i> Cuentas bancarias</h3>
+				<h3 id="cuentas" class="section-title"><i class="bi bi-wallet2"></i> Cuentas</h3>
 				<div class="d-flex justify-content-end mb-3">
 					<button id="openOverlay" class="btn btn-main"><i class="bi bi-plus-circle"></i> Nueva cuenta</button>
 				</div>
 
-				<div class="table-responsive">
-					<table class="table table-dark table-hover align-middle">
-						<thead>
-							<tr class="text-info">
-								<th>Nombre</th>
-								<th>Saldo</th>
-								<th class="">Tipo</th>
-								<th class="text-center">Acciones</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for cuenta in cuentas %}
-							<tr>
-								<td>{{ cuenta.nombre }}</td>
-								<td>${{ cuenta.saldo }}</td>
-								<td>
-									{% if cuenta.tipo == 'CC' %}
-									<span class="badge bg-success">Cuenta Corriente</span>
-									{% elif t.tipo == 'CA' %}
-									<span class="badge bg-danger">Cuenta Ahorro</span>
-									{% elif t.tipo == 'CV' %}
-									<span class="badge bg-danger">Cuenta Vista</span>
-									{% elif t.tipo == 'CI' %}
-									<span class="badge bg-danger">Cuenta Inversion</span>
-									{% elif t.tipo == 'CE' %}
-									<span class="badge bg-danger">Cuenta Corriente Empresarial</span>
-									{% elif t.tipo == 'CD' %}
-									<span class="badge bg-danger">Cuenta Digital</span>
-									{% else %}
-									<span class="badge bg-primary">Otro</span>
-									{% endif %}
-								</td>
+				<div class="card p-3 mb-4">
+					<h5 class="mb-3 text-info fw-semibold"><i class="bi bi-graph-up me-2"></i> Resumen de Cuentas</h5>
 
-								<td class="text-center">
-									<a href="" class="btn btn-sm btn-outline-info me-2"><i class="bi bi-pencil-square"></i></a>
-									<a href="}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
-								</td>
-							</tr>
-							{% empty %}
-							<tr>
-								<td colspan="4" class="text-center text-muted">No hay cuentas registradas.</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+					<div class="table-responsive custom-table-container">
+						<table class="table table-dark table-hover align-middle mb-0 rounded-3 overflow-hidden">
+							<thead class="table-gradient">
+								<tr class="text-info">
+									<th>Nombre</th>
+									<th>Saldo</th>
+									<th>Tipo</th>
+									<th class="text-center">Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for cuenta in cuentas %}
+								<tr>
+									<td>{{ cuenta.nombre }}</td>
+									<td>${{ cuenta.saldo }}</td>
+									<td>
+										{% if cuenta.tipo == 'CC' %}
+										<span class="badge bg-success bg-opacity-75">Cuenta Corriente</span>
+										{% elif cuenta.tipo == 'CA' %}
+										<span class="badge bg-primary bg-opacity-75">Cuenta Ahorro</span>
+										{% elif cuenta.tipo == 'CV' %}
+										<span class="badge bg-warning text-dark">Cuenta Vista</span>
+										{% elif cuenta.tipo == 'CI' %}
+										<span class="badge bg-info bg-opacity-75">Cuenta Inversión</span>
+										{% elif cuenta.tipo == 'CE' %}
+										<span class="badge bg-danger bg-opacity-75">Cuenta Empresarial</span>
+										{% elif cuenta.tipo == 'CD' %}
+										<span class="badge bg-secondary bg-opacity-75">Cuenta Digital</span>
+										{% else %}
+										<span class="badge bg-light text-dark">Otro</span>
+										{% endif %}
+									</td>
+
+									<td class="text-center">
+										<a href="#" class="btn btn-sm btn-outline-info me-2 rounded-circle">
+											<i class="bi bi-pencil-square"></i>
+										</a>
+										<a href="#" class="btn btn-sm btn-outline-danger rounded-circle">
+											<i class="bi bi-trash"></i>
+										</a>
+									</td>
+								</tr>
+								{% empty %}
+								<tr>
+									<td colspan="4" class="text-center text-muted py-4">No hay cuentas registradas.</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

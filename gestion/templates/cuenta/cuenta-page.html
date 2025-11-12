@@ -217,126 +217,71 @@
 				{%endif%}
 				<h3 id="cuentas" class="section-title"><i class="bi bi-wallet2"></i> Cuentas</h3>
 				<div class="d-flex justify-content-end mb-3">
-					<button id="openCrearCuenta" class="btn btn-main"><i class="bi bi-plus-circle"></i> Nueva cuenta</button>
+					<button id="openOverlay" class="btn btn-main"><i class="bi bi-plus-circle"></i> Nueva cuenta</button>
 				</div>
 
-				<div class="table-responsive">
-					<table class="table table-dark table-hover align-middle">
-						<thead>
-							<tr class="text-info">
-								<th>Nombre</th>
-								<th>Saldo</th>
-								<th class="text-center">Acciones</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for cuenta in cuentas %}
-							<tr>
-								<td>{{ cuenta.nombre }}</td>
-								<td>${{ cuenta.saldo }}</td>
-								<td class="text-center">
-									<a
-										href="#"
-										class="btn btn-sm btn-outline-info me-2"
-										data-id="{{ cuenta.id }}"
-										data-nombre="{{ cuenta.nombre }}"
-										id="openModificarCuenta"
-									>
-										<i class="bi bi-pencil-square"></i>
-									</a>
-									<a href="#" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
-								</td>
-							</tr>
-							{% empty %}
-							<tr>
-								<td colspan="4" class="text-center text-muted">No hay cuentas registradas.</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-					>>>>>>> 00d4d3984381badd3c6ede7276327d57aaaa1251
+				<div class="card p-3 mb-4">
+					<h5 class="mb-3 text-info fw-semibold"><i class="bi bi-graph-up me-2"></i> Resumen de Cuentas</h5>
+
+					<div class="table-responsive custom-table-container">
+						<table class="table table-dark table-hover align-middle mb-0 rounded-3 overflow-hidden">
+							<thead class="table-gradient">
+								<tr class="text-info">
+									<th>Nombre</th>
+									<th>Saldo</th>
+									<th>Tipo</th>
+									<th class="text-center">Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for cuenta in cuentas %}
+								<tr>
+									<td>{{ cuenta.nombre }}</td>
+									<td>${{ cuenta.saldo }}</td>
+									<td>
+										{% if cuenta.tipo == 'CC' %}
+										<span class="badge bg-success bg-opacity-75">Cuenta Corriente</span>
+										{% elif cuenta.tipo == 'CA' %}
+										<span class="badge bg-primary bg-opacity-75">Cuenta Ahorro</span>
+										{% elif cuenta.tipo == 'CV' %}
+										<span class="badge bg-warning text-dark">Cuenta Vista</span>
+										{% elif cuenta.tipo == 'CI' %}
+										<span class="badge bg-info bg-opacity-75">Cuenta Inversión</span>
+										{% elif cuenta.tipo == 'CE' %}
+										<span class="badge bg-danger bg-opacity-75">Cuenta Empresarial</span>
+										{% elif cuenta.tipo == 'CD' %}
+										<span class="badge bg-secondary bg-opacity-75">Cuenta Digital</span>
+										{% else %}
+										<span class="badge bg-light text-dark">Otro</span>
+										{% endif %}
+									</td>
+
+									<td class="text-center">
+										<a href="#" class="btn btn-sm btn-outline-info me-2 rounded-circle">
+											<i class="bi bi-pencil-square"></i>
+										</a>
+										<a href="#" class="btn btn-sm btn-outline-danger rounded-circle">
+											<i class="bi bi-trash"></i>
+										</a>
+									</td>
+								</tr>
+								{% empty %}
+								<tr>
+									<td colspan="4" class="text-center text-muted py-4">No hay cuentas registradas.</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
 
 		<footer>© 2025 FinControl — Panel de gestión financiera</footer>
 
-		<div id="overlayModificar" class="overlay">{% include "cuenta/modificar_cuenta.html" %}</div>
-
-		<div id="overlayCrear" class="overlay">{% include "cuenta/crear_cuenta.html" %}</div>
+		{% include "cuenta/crear_cuenta.html" %}
 
 		<!-- Bootstrap JS (bundle incluye popper) -->
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-		<script>
-			document.addEventListener('DOMContentLoaded', () => {
-				const modalCrear = document.getElementById('overlayCrear');
-				const modalModificar = document.getElementById('overlayModificar');
-				const openCrear = document.getElementById('openCrearCuenta');
-				const openModificar = document.getElementById('openModificarCuenta');
-				const closeCrear = document.getElementById('closeCrearOverlay');
-				const closeModificar = document.getElementById('closeModificarOverlay');
-
-				// Abrir modales
-				if (openCrear) {
-					openCrear.addEventListener('click', (e) => {
-						e.preventDefault();
-						modalCrear.classList.add('active');
-					});
-				}
-
-				if (openModificar) {
-					openModificar.addEventListener('click', (e) => {
-						e.preventDefault();
-						modalModificar.classList.add('active');
-					});
-				}
-
-				// Cerrar modales
-				if (closeCrear) {
-					closeCrear.addEventListener('click', (e) => {
-						e.preventDefault();
-						modalCrear.classList.remove('active');
-					});
-				}
-
-				if (closeModificar) {
-					closeModificar.addEventListener('click', (e) => {
-						e.preventDefault();
-						modalModificar.classList.remove('active');
-					});
-				}
-
-				// Cerrar con fondo clicado o Escape
-				document.addEventListener('keydown', (e) => {
-					if (e.key === 'Escape') {
-						modalCrear.classList.remove('active');
-						modalModificar.classList.remove('active');
-					}
-				});
-
-				[modalCrear, modalModificar].forEach((modal) => {
-					modal.addEventListener('click', (e) => {
-						if (e.target === modal) modal.classList.remove('active');
-					});
-				});
-			});
-		</script>
-
-		<script>
-			const modalModificar = document.getElementById('overlayModificar');
-			const openButtons = document.querySelectorAll('#openModificarCuenta');
-			const inputId = modalModificar.querySelector('input[name="id"]');
-			const inputNombre = modalModificar.querySelector('input[name="nombre"]');
-
-			openButtons.forEach((btn) => {
-				btn.addEventListener('click', (e) => {
-					e.preventDefault();
-					modalModificar.classList.add('active');
-					inputId.value = btn.dataset.id;
-					inputNombre.value = btn.dataset.nombre;
-				});
-			});
-		</script>
 	</body>
 </html>
